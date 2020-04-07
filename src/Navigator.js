@@ -11,7 +11,7 @@ import ListItem from './ListItem'
 
 class Navigator extends React.Component {
     state = {
-        loggerOpened: true,
+        loggerOpened: false,
         loginProcessing: false
     }
 
