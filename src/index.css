@@ -1,5 +1,4 @@
-
-body {
+@import url('https://fonts.googleapis.com/css?family=Gotu|Shadows+Into+Light&display=swap');body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -28,7 +27,10 @@ body {
   background-image: url('./photo0.jpg') !important;
   opacity: .9; 
   background-size: contain !important;
+}
 
+.backgroundWhiteTexture>*{
+  opacity: 1;
 }
 
 .allSpace {
@@ -72,6 +74,18 @@ body {
 .boldOnHover:hover {
   font-weight: bold;
   cursor: pointer
+}
+
+.gotuText { /* gotu font */
+  font-family: 'Gotu', sans-serif;
+}
+
+.silText {  /* shadow into light font */
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.centered {
+  text-align: center
 }
 
 /* .shadow {
