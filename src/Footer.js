@@ -10,11 +10,26 @@ const AppLogo = (props) => <Image {...props} centered src={logo} size="small" /
 
 /**
  * ##PROPS
- *  - recruitments (from app datas Config)
- *  - Log
+ *  - toggleLogger {function}(bound) : allow toggling Home login modal
+ *  - modalOpener {function}(bound) : allow login any component within a modal
  */
 class Footer extends Component {
     state = {}
+
+    logLegalMentions = () => {
+        var { modalOpener } = this.props    // App's "log" state setter
+
+        modalOpener({
+            message:<LegalMentions appLogo={AppLogo}/>, 
+            stay:true, 
+            closeButton:true, 
+            size: 'fullscreen', 
+            classAttribute:'gotuTextAll', 
+            closeText: <div>Ok<Icon style={{paddingLeft: 5}} name="thumbs up outline" color="white"/></div>
+        });
+
+        return true
+    }
 
     render() {
         const { isSmallDevice, isTablet } = Layout
@@ -33,16 +48,14 @@ class Footer extends Component {
                             
                             <div className="ui mid divider"></div>
                             <div><a href="#realisations" className="clickable ui center aligned white header"><h4>Réalisations</h4></a></div>
-                            <div className="ui mid divider"></div>    
-                            <div><a href="#contact" className="clickable ui center aligned white header"><h4>Nous Contacter</h4></a></div>
-                                
+                           
+                            <div className="ui mid divider"></div>
+                            <div className="clickable ui center aligned white small header" onClick={this.logLegalMentions}><h4>Mentions légales</h4></div>
 
                             <div className="ui mid divider"></div>
-                            <a className="clickable ui center aligned white small header" href="https://intranet.batifis.fr/" target="_blank" rel="noopener noreferrer"><h4>Intranet</h4></a>
+                            <div onClick={this.props.toggleLogger} className="clickable ui center aligned white small header"><h4>Connexion membre</h4></div>
 
-                            <div className="ui mid divider"></div>
-                            <div className="clickable ui center aligned white small header" onClick={this.logLegalMentions}><h4>Mentions Légales</h4></div>
-                            
+
                             <div className="ui mid divider"></div>
                             <div className="clickable ui center aligned white small header"><a className="regularATag" href="https://proapps.fr" target="_blank" rel="noopener noreferrer"><h4>Concepteur site web & application</h4></a></div>
 

@@ -26,7 +26,17 @@ const ListItem = (props) => {
     const flex = spaceEvenly && 1 / containersToCreate
     console.log('flex', flex)                               // .5
 
-    const rowContainersStyle = (alignProp) => ({flex: flex || .33, textAlign: (alignAll || typeof alignProp !== 'undefined') && alignAll || (props[`${alignProp}ContainerAlign`] || 'center'), justifyContent: 'center', alignItems: 'center'})
+    const rowContainersStyle = (alignProp) => ({
+        flex: flex || .33, 
+        textAlign: (
+            alignAll || typeof alignProp !== 'undefined'
+        ) 
+        &&  (
+            alignAll || (props[`${alignProp}ContainerAlign`] || 'center')
+        ), 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    })
     
     const ItemHeader = () => <div style={rowContainersStyle('center')}>
         <Header

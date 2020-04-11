@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { Modal, Image, Loader, Button, Icon, Header } from 'semantic-ui-react'
 /**
  * Props List : 
- *   - title : change default title to provided one
+ *   - title : change default title
  *   - subtitle : add a 2nd title as h4 above message
  *   - message : (any) *required* message to display (/!\ method throws if no message is provided)
  *   - messageClass
@@ -17,7 +17,8 @@ import { Modal, Image, Loader, Button, Icon, Header } from 'semantic-ui-react'
  *   - timedOutComponent : (any) display a component when timed out (prop "stay" needs to be a number in order for timedOutComponent to be display)
  *   - activityIndicator : display an animated loader
  *   - activityIndicatorText : display a text next to loader
- *   - closeButton : (bool) add a button to close message
+ *   - closeButton : {bool} add a button to close message
+ *   - closeText : {string} change default "Fermer" text for close button
  *   - styleSheet : style Object
  *   - size : (string) 'mini', 'tiny', 'small', 'large', 'fullscreen'
  *   - classAttribute : modal class attribute
@@ -25,7 +26,7 @@ import { Modal, Image, Loader, Button, Icon, Header } from 'semantic-ui-react'
  *   - imageSize
  *   - closed : (bool) indicates if modal needs to be closed (default: false)
  *   - id : (string) sets an id for modal
- *   - onClickState : {Object} proceed object iteration when closeButton is clicked and state is set
+ *   - onClickState : {Object} merge state while seting state when closeButton is clicked
  * 
  */
 export default class Log extends Component {
@@ -89,14 +90,18 @@ export default class Log extends Component {
 
 
     maybeShowButtons = () => {                      
-        var { closeButton, onClickState } = this.props
+        var { closeButton, onClickState, closeText } = this.props
         const { timedOutComponent } = this.state
         onClickState = onClickState || {}
-
+        const _closeText = closeText || "Fermer";
+        console.log('closeText', closeText)
+        console.log('_closeText', _closeText)
         return(
-            closeButton && !timedOutComponent
-            ? <div className="centered"><Button color="anthracite" onClick={() => this.setState({endMsg:true, closed:true, ...onClickState})}>Fermer</Button></div>
-            : ''
+            (closeButton || closeText) && !timedOutComponent
+            ? <div className="centered" style={{marginBottom: 20}}>
+                <Button color="grey" onClick={() => this.setState({endMsg:true, closed:true, ...onClickState})}>{_closeText}</Button>
+            </div>
+            : null
         )
     }
 
@@ -106,7 +111,7 @@ export default class Log extends Component {
             icon
             ? <Icon name={icon} size={iconSize} style={iconStyle} color={iconColor} />
             : (
-                iconComponent || ''
+                iconComponent || null
             )
         )
     }
@@ -118,7 +123,7 @@ export default class Log extends Component {
         return(
             activityIndicator && !timedOutComponent
             ? <div className="ui bottom attached header"><Loader active>{activityIndicatorText}</Loader></div>  /* ISSUE : TODO : RAT : loader appears white */
-            : ''
+            : null
         )
     }
 
@@ -157,7 +162,7 @@ export default class Log extends Component {
 
     render() { 
         const {title, size, styleSheet, closed, classAttribute, id} = this.props
-
+        console.log('Log props on render', this.props)
         return(
             <Modal id={id} open={!closed && !this.state.closed} style={{...styleSheet}} size={size} className={classAttribute.concat(' tekotxtall')} >
                 <Modal.Header>
@@ -165,9 +170,9 @@ export default class Log extends Component {
                     {title}
                 </Modal.Header>
                 {this.maybeImageModalCore()}
-                <div className="padded"></div>
+                <div className="padded" />
                 {this.maybeShowLoader()}
-                <div className="padded"></div>
+                <div className="padded" />
                 {this.maybeShowButtons()}  
             </Modal>
         )

@@ -41,27 +41,33 @@ class Home extends Component {
         }
     }
 
-    log = (log) => this.setState({log})
+    log = (log) => {
+        console.log(' ---> loggin an msg...')
+        this.setState({log, loggerOpened: false})
+    }
     
     maybeLogMsg = () => {
         const {log} = this.state
-        var { message, title, icon, iconStyle, iconColor, activityIndicator, stay, closeButton, classAttribute, timedOutComponent, maxStay } = log || {}
-        maxStay = parseInt(maxStay)   // make sure we deal with a number type variable
+        console.log(' ---> logging log ', log)
+
+        var { message, title, classAttribute, maxStay/*, icon, iconStyle, iconColor, activityIndicator, stay, closeButton, timedOutComponent */} = log || {}
+        maxStay = parseInt(maxStay);   // make sure we deal with a number type variable
 
         return(
             message || title 
             ? <Log 
-                closed={typeof message === 'undefined'} 
-                message={message}
-                title={title}
-                icon={icon}
-                iconStyle={iconStyle}
-                iconColor={iconColor}
-                activityIndicator={activityIndicator}
-                stay={stay}
+                // message={message}
+                // title={title}
+                // icon={icon}
+                // iconStyle={iconStyle}
+                // iconColor={iconColor}
+                // activityIndicator={activityIndicator}
+                // stay={stay}
+                // timedOutComponent = {timedOutComponent}
+                // closeButton={closeButton}
+                {...log}
                 maxStay={maxStay}        
-                timedOutComponent = {timedOutComponent}
-                closeButton={closeButton}
+                closed={typeof message === 'undefined'} 
                 classAttribute={classAttribute || "centered"}
                 logMethod={this.log.bind(this)}
             />
@@ -155,11 +161,11 @@ class Home extends Component {
                                     //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                     onClick={this.toggleLogger}
                                 >
-                                    Me connecter
+                                    Connexion
                                 </div>
 
                                 <a 
-                                    className="boldOnHover silText paddingHor"
+                                    className="boldOnHover silText white"
                                     //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                     href='mailto:contact@batifis.fr'
                                 >
@@ -206,13 +212,6 @@ class Home extends Component {
                         </div>
                     </Slide>
 
-                    <Slide bottom>
-                        <div id="contact" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.white, color: Colors.black}}>
-                                
-                                Nous contacter
-                        
-                        </div>
-                    </Slide>
                     
                     {/* footer */}
                     {/* <div style={{height: '20vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
@@ -220,7 +219,7 @@ class Home extends Component {
 
                     </div> */}
                     <div className="footerWrapper" style={{backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
-                        <Footer Log={this.log.bind(this)} />
+                        <Footer modalOpener={this.log.bind(this)} toggleLogger={this.toggleLogger.bind(this)}/>
                     </div>
                 </div>
                 {this.maybeLogMsg()}
