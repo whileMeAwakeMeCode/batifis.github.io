@@ -1,4 +1,129 @@
-@import url('https://fonts.googleapis.com/css?family=Gotu|Shadows+Into+Light&display=swap');body {
+
+/* imports */
+@import url('https://fonts.googleapis.com/css?family=Gotu|Shadows+Into+Light&display=swap');
+
+
+/* keyframes */
+@-webkit-keyframes shake-horizontal{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%{-webkit-transform:translateX(10px);transform:translateX(10px)}80%{-webkit-transform:translateX(8px);transform:translateX(8px)}90%{-webkit-transform:translateX(-8px);transform:translateX(-8px)}}@keyframes shake-horizontal{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%{-webkit-transform:translateX(10px);transform:translateX(10px)}80%{-webkit-transform:translateX(8px);transform:translateX(8px)}90%{-webkit-transform:translateX(-8px);transform:translateX(-8px)}}
+
+/* dimensions / spaces */
+.flexCenter {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+.flexRow {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+.flexEnd {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+.flexStart {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+}
+.viewPortWidth {
+  width: 100vw;
+  overflow: scroll 
+}
+.headerSegment {
+  background-image: url('./photo0.jpg') !important;
+  opacity: .9; 
+  background-size: contain !important;
+}
+.allSpace {
+  height: 100%;
+  width: 100%
+}
+.paddingHorizontal5 {
+  padding-left: 5;
+  padding-right: 5
+}
+.imgSegment {
+  height: 100vh;
+}
+.row {
+  flex-direction: row;
+}
+.allWidth {
+  width: 100%
+}
+.spaceAround {
+  justify-content: space-around;
+}
+.flex {
+  display:'flex'; flex: 1
+}
+.flexHalf {
+  display: flex;
+  flex: .5
+}
+
+
+/* positions */
+.centered {
+  text-align: center
+}
+.leftAlign {
+  text-align: left
+}
+.mid.divider{margin-left:25%; margin-right:25%}
+
+
+
+
+/* effects */
+.boldOnHover:hover {
+  font-weight: bold;
+  cursor: pointer
+}
+.shadow {
+  box-shadow: '5px 10px #000';
+}
+.clickable {
+  cursor: pointer;
+}
+.shake-horizontal:hover{-webkit-animation:shake-horizontal 2.5s cubic-bezier(.455,.03,.515,.955) infinite both;animation:shake-horizontal 2.5s cubic-bezier(.455,.03,.515,.955) infinite both}
+/* text styles */
+.gotuText, h4 { 
+  font-family: 'Gotu', sans-serif !important;
+}
+.gotuTextAll>* { 
+  font-family: 'Gotu', sans-serif !important;
+}
+.silText {  
+  font-family: 'Shadows Into Light', cursive;
+}
+.redText {
+  color: "red";
+}
+.bold{
+  font-weight: bold;
+
+}
+.white, .white>* {
+  color: #fff !important
+}
+
+
+
+/* custom elements */
+.footerWrapper, .footerWrapper>div {
+  color: #fff !important;
+  background-color: #707070
+}
+
+
+/* basic elements */
+body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -6,91 +131,29 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-.flexCenter {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
+a:not(.regularATag){
+  color: #fff !important;
 }
 
-.redText {
-  color: "red";
+.regularATag{
+  color: #fff !important
 }
 
-.viewPortWidth {
-  width: 100vw;
-  overflow: scroll 
+
+/* backgrounds */
+.blueToBlackGradient {
+  background-image: linear-gradient(#272674, #000);
 }
 
-.headerSegment {
-  background-image: url('./photo0.jpg') !important;
-  opacity: .9; 
-  background-size: contain !important;
+.blueToGreyGradient {
+  background-image: linear-gradient(#272674, #d8dad6)
 }
 
-.backgroundWhiteTexture>*{
-  opacity: 1;
+.blackBkg {
+  background-color: #000;
 }
 
-.allSpace {
-  height: 100%;
-  width: 100%
-}
 
-.imgSegment {
-  height: 100vh;
-}
-
-.row {
-  flex-direction: row;
-}
-
-.spaceAround {
-  justify-content: space-around;
-}
-
-.right {
-  align-items: flex-end;
-}
-
-.left {
-  align-items: flex-start;
-}
-
-.allWidth {
-  width: 100%
-}
-
-.flex {
-  display:'flex'; flex: 1
-}
-
-.flexHalf {
-  display: flex;
-  flex: .5
-}
-
-.boldOnHover:hover {
-  font-weight: bold;
-  cursor: pointer
-}
-
-.gotuText { /* gotu font */
-  font-family: 'Gotu', sans-serif;
-}
-
-.silText {  /* shadow into light font */
-  font-family: 'Shadows Into Light', cursive;
-}
-
-.centered {
-  text-align: center
-}
-
-/* .shadow {
-  box-shadow: '1px 5px 10px rgba(0,0,0,.5)'
-} */
 
 
 

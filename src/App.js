@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Navigator from './Navigator'
+import Home from './Home'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Navigator />
+      <Home />
     </div>
   );
 }

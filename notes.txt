@@ -1,1 +1,3 @@
-batifisBlue : 252572
+batifisBlue : 
+    #252572 (+foncé)
+    #272674 (+clair)
