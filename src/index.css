@@ -35,6 +35,13 @@
   justify-content: flex-start;
   align-items: center;
 }
+
+.flexEndVertical {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: flex-end;
+}
 .viewPortWidth {
   width: 100vw;
   overflow: scroll 
@@ -72,6 +79,9 @@
 }
 .spaceAround {
   justify-content: space-around;
+}
+.spaceEvenly {
+  justify-content: space-evenly;
 }
 .flex {
   display:'flex'; flex: 1

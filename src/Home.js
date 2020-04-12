@@ -25,7 +25,8 @@ import CustomIcon from './CustomIcon';
 class Home extends Component {
     state = {
         loggerOpened: false,
-        loginProcessing: false
+        loginProcessing: false,
+        activeCategory: null,   // by default realisations list contains images from all category of realisations and the activeCategory(tag id) view is hidden
     }
 
     categories = [
@@ -111,31 +112,51 @@ class Home extends Component {
         )
     }
 
-    
+    scrollTo = (route) => {
+        console.log('scrolling to')
+        window.location.href = `/#${route}`
+    }
 
+    goToCategoriesMenu = () => this.scrollTo('metier')
+    goToRealisations = () => this.scrollTo('realisations')
+
+    activateCategory = (activeCategory) => {
+        // Layout.isSmallDevice
+        // ? 
+        this.scrollTo('activeCategory')
+        this.setState({activeCategory})
+    }
+
+    resetActiveCategory = () => {
+        this.setState({activeCategory: null})
+        setTimeout(() => {
+            this.scrollTo('realisations')
+        })
+    }
+
+
+    
     renderCategoriesColumn = (colIndex) => {
         let _categories = Array.from(this.categories)   // do not work on original this.categories
-        console.log(' ---> rendering column', colIndex)
 
         const catLength = _categories.length
-        console.log('catLength', catLength)
 
         const colChangeIndex = (catLength) / 2
-        console.log('colChangeIndex', colChangeIndex)
 
         const topIndex = colIndex === 0 ? 0 : colChangeIndex
-        console.log('topIndex', topIndex)
-
 
         // column categories
         const colCats = _categories.splice(topIndex, Layout.isSmallDevice ? catLength : colChangeIndex)
-        console.log('colCats', colCats)
         
         return (
             <div key={`cat_${colIndex}`} className="flexCenter spaceAround" style={{flexDirection: "column", flex: 1}}>
                 <Fade>
                 {
-                    colCats.map((cat, catIndex) => <div key={`column${colIndex}_category_${catIndex}`} className={`clickable flexHalf row`}>
+                    colCats.map((cat, catIndex) => <div 
+                            key={`column${colIndex}_category_${catIndex}`} 
+                            className={`clickable flexHalf row`}
+                            onClick={() => this.activateCategory(cat)}
+                        >
                             {<CustomIcon name={cat.key} size={cat.iconSize || 40} />}
                             <ul className="catTitleList" style={{width: Layout.isSmallDevice ? '80vw' : '20vw'}}>
                                 <li className="noDot silText noWrap" style={{fontSize: Layout.bigTitleText, marginLeft: Layout.isSmallDevice ? '10vw' : '5vw'}}>
@@ -150,13 +171,14 @@ class Home extends Component {
         )
     }
 
-   
+
     render() {
         const {isSmallDevice} = Layout
-        const {loginProcessing, connected} = this.state
+        const {loginProcessing, connected, activeCategory} = this.state
         const anthracite = "#818181"
         const catchMarginVertical = Layout.isSmallDevice ? 50 : 100;
-
+        const CategorySelection = () => <Button style={{width: '100vw'}} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>
+        console.log(' ---> active category', activeCategory)
         return(
             
             <div style={{zIndex: 1}}>
@@ -233,7 +255,7 @@ class Home extends Component {
                 >
                     <div style={{height: '50vh'}}>
                         <div className="flexRow flexStart" style={{height: 30}}>
-                            <div className="flexStart spaceAround" style={{flex: .2, fontSize: 17, color: "#0d11db"}}>    
+                            <div className="flexStart spaceAround noWrap" style={{flex: isSmallDevice ? .5 : .3, fontSize: 17, color: "#0d11db"}}>    
 
                                 <div 
                                     className="boldOnHover silText"
@@ -248,6 +270,7 @@ class Home extends Component {
                                     className="boldOnHover silText white"
                                     //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                     href='mailto:contact@batifis.fr'
+            
                                 >
                                     Nous contacter  
                                 </a>
@@ -279,9 +302,9 @@ class Home extends Component {
                 
                 <div className="gotuTextAll">
                     <Slide left>
-                        <div className="silTextAll" id="metier" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisBlue, color: Colors.white}}>
-                                <div className="flexCenter" style={{fontSize: Layout.titleText, flex: .3}}>Notre Métier</div>
-                                <div className="flexCenter row spaceAround">
+                        <div className="silTextAll" id="metier" style={{height: isSmallDevice ? '100vh' : '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisBlue, color: Colors.white}}>
+                                <div className="flexCenter" style={{fontSize: Layout.bigTitleText, flex: .3}}>Notre Métier</div>
+                                <div className="flexCenter row spaceEvenly">
                                     {/* <div className="clickable flexHalf row">
                                         <CustomIcon name="wheelbarrow" size={40} />
                                         <ul><li className="silText" style={{fontSize: 25}}>Maçonnerie</li></ul>
@@ -296,17 +319,50 @@ class Home extends Component {
                                         !Layout.isSmallDevice && this.renderCategoriesColumn(1)
                                     }
                                 </div>
-                                
+                                {
+                                    activeCategory
+                                    ? <div className="flexCenter" style={{flex: .2, alignItems: 'flex-end', paddingBottom: 5}}>
+                                        <Button onClick={this.resetActiveCategory}>Voir toutes nos réalisations</Button>
+                                    </div>
+                                    : null
+                                }
                         </div>
                     </Slide>
 
+                    <div id="activeCategory">
+                        {
+                            activeCategory
+                            ? <div className="silTextAll flexCenter" style={{height: '100vh', backgroundColor: Colors.white, color: Colors.anthracite, flexDirection: 'column'}}>
+                                <Slide top>
+                                    <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', flex: .1}}>
+                                        <p style={{fontSize: Layout.bigTitleText, color: Colors.batifisBlue}}>{activeCategory.title}</p>
+                                    </div>
+                                    <div style={{flex: .8}}></div>
+                                    <div style={{flex: .1}}>
+                                        <CategorySelection />
+                                        <Button style={{width: '100vw', marginTop: 5, marginBottom: '1%'}} onClick={this.goToRealisations}>Voir toutes les réalisations dans la catégorie {activeCategory.title}</Button>
+                                    </div>
+                                </Slide>
+                            </div>
+                            : null
+                        }
+                    </div>
+
                     <Slide right>
                         <Fade>
-                            <div className="silTextAll" id="realisations" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                                <p style={{fontSize: Layout.titleText, marginTop: 5}}>Nos Réalisations</p>
+                            <div className="silTextAll" id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
+                                <p style={{fontSize: Layout.bigTitleText, marginTop: 5}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
                                 <div className="flexCenter row" style={{padding: '10vw'}}>
-                                    
-                                </div>    
+                                    {/* gallery MUST have 2 modes : activeCategory(state) || all */}
+                                </div>  
+                                {
+                                    activeCategory
+                                    ? <div>
+                                        <CategorySelection />
+                                    </div>
+                                    : <Button style={{width: '100vw'}} onClick={this.goToCategoriesMenu}>Sélectionner une {activeCategory ? "autre" : ""} catégorie</Button>
+
+                                }  
                             </div>
                         </Fade>
                     </Slide>
