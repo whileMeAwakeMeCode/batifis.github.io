@@ -27,6 +27,42 @@ class Home extends Component {
         loggerOpened: false,
         loginProcessing: false
     }
+
+    categories = [
+        {
+            title: "Maçonnerie",
+            key: "maconnerie",
+        },
+        {
+            title: "Rénovation intérieur",
+            key: 'renoInt',
+        },
+        {
+            title: "Rénovation extérieur",
+            key: 'renoExt',
+        },
+        {
+            title: "Carrelage et Faïence",
+            key: 'carrelage',
+        },
+        {
+            title: "Construction",
+            key: 'construction',
+            //iconSize: 70
+        },
+        {
+            title: "Isolation",
+            key: 'isolation',
+        },
+        {
+            title: "Peinture",
+            key: "peinture",
+        },
+        {
+            title: "Enduit",
+            key: 'enduit',
+        }
+    ]
     
 
     toggleLogger = () => this.setState({loggerOpened: !this.state.loggerOpened})
@@ -72,6 +108,45 @@ class Home extends Component {
                 logMethod={this.log.bind(this)}
             />
             : null
+        )
+    }
+
+    
+
+    renderCategoriesColumn = (colIndex) => {
+        let _categories = Array.from(this.categories)   // do not work on original this.categories
+        console.log(' ---> rendering column', colIndex)
+
+        const catLength = _categories.length
+        console.log('catLength', catLength)
+
+        const colChangeIndex = (catLength) / 2
+        console.log('colChangeIndex', colChangeIndex)
+
+        const topIndex = colIndex === 0 ? 0 : colChangeIndex
+        console.log('topIndex', topIndex)
+
+
+        // column categories
+        const colCats = _categories.splice(topIndex, Layout.isSmallDevice ? catLength : colChangeIndex)
+        console.log('colCats', colCats)
+        
+        return (
+            <div key={`cat_${colIndex}`} className="flexCenter spaceAround" style={{flexDirection: "column", flex: 1}}>
+                <Fade>
+                {
+                    colCats.map((cat, catIndex) => <div key={`column${colIndex}_category_${catIndex}`} className={`clickable flexHalf row`}>
+                            {<CustomIcon name={cat.key} size={cat.iconSize || 40} />}
+                            <ul className="catTitleList" style={{width: Layout.isSmallDevice ? '80vw' : '20vw'}}>
+                                <li className="noDot silText noWrap" style={{fontSize: Layout.bigTitleText, marginLeft: Layout.isSmallDevice ? '10vw' : '5vw'}}>
+                                    {cat.title}
+                                </li>
+                            </ul>
+                        </div>
+                    )
+                }
+                </Fade>
+            </div>
         )
     }
 
@@ -205,26 +280,35 @@ class Home extends Component {
                 <div className="gotuTextAll">
                     <Slide left>
                         <div className="silTextAll" id="metier" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisBlue, color: Colors.white}}>
-                                <p style={{fontSize: Layout.titleText, marginTop: 5}}>Notre Métier</p>
-                                <div className="flexCenter row" style={{padding: '10vw'}}>
-                                    <div className="flexHalf row">
+                                <div className="flexCenter" style={{fontSize: Layout.titleText, flex: .3}}>Notre Métier</div>
+                                <div className="flexCenter row spaceAround">
+                                    {/* <div className="clickable flexHalf row">
                                         <CustomIcon name="wheelbarrow" size={40} />
                                         <ul><li className="silText" style={{fontSize: 25}}>Maçonnerie</li></ul>
                                     </div>
                                     <div className="flexHalf">
-                                        {/* right column */}
-                                    </div>
+                                    // right column ,
+                                    </div> */}
+                                    {
+                                        this.renderCategoriesColumn(0)
+                                    }
+                                    {
+                                        !Layout.isSmallDevice && this.renderCategoriesColumn(1)
+                                    }
                                 </div>
                                 
                         </div>
                     </Slide>
 
                     <Slide right>
-                        <div id="realisations" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                            
-                                Nos Réalisations
-                        
-                        </div>
+                        <Fade>
+                            <div className="silTextAll" id="realisations" style={{height: '50vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
+                                <p style={{fontSize: Layout.titleText, marginTop: 5}}>Nos Réalisations</p>
+                                <div className="flexCenter row" style={{padding: '10vw'}}>
+                                    
+                                </div>    
+                            </div>
+                        </Fade>
                     </Slide>
 
                     

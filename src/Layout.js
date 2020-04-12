@@ -10,5 +10,6 @@ export default {
     portrait: window.innerWidth < window.innerHeight,
     landscape: window.innerHeight < window.innerWidth,
     titleText: isSmallDevice ? 15 : 25,
+    bigTitleText: isSmallDevice ? 23 : 30,
     buttonText: isSmallDevice ? 14 : 17,
 }

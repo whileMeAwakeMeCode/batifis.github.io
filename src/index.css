@@ -90,6 +90,15 @@
   text-align: left
 }
 .mid.divider{margin-left:25%; margin-right:25%}
+.noWrap {
+  flex-wrap: nowrap !important;
+  white-space: noWrap
+}
+.inline {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+}
 
 
 
@@ -150,6 +159,14 @@
 .footerWrapper, .footerWrapper>div {
   color: #fff !important;
   background-color: #707070
+}
+.catTitleList {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+}
+.noDot {
+  list-style-type: none;
 }
 
 

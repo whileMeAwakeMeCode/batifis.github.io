@@ -1,7 +1,14 @@
 import React from 'react'
 
 const customIcons = {
-    wheelbarrow: require('./icons/wheelbarrow.png')
+    maconnerie: require('./icons/maconnerie.png'),
+    construction: require('./icons/construction.png'),
+    carrelage: require('./icons/carrelage.png'),
+    isolation: require('./icons/isolation.png'),
+    renoInt: require('./icons/renoInt.png'),
+    renoExt: require('./icons/renoExt.png'),
+    peinture: require('./icons/peinture.png'),
+    enduit: require('./icons/enduit.png')
 }
 
 // wheelbarrow
