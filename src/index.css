@@ -74,6 +74,9 @@
 .row {
   flex-direction: row;
 }
+.column {
+  flex-direction: column;
+}
 .allWidth {
   width: 100%
 }
@@ -109,6 +112,9 @@
   flex: 1;
   flex-wrap: nowrap;
 }
+.wrap {
+  flex-wrap: wrap
+}
 
 
 
@@ -119,7 +125,9 @@
   cursor: pointer
 }
 .shadow {
-  box-shadow: '5px 10px #000';
+  -webkit-box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
+  box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
 }
 .clickable {
   cursor: pointer;
@@ -146,7 +154,7 @@
   font-family: 'Gotu', sans-serif !important;
 }
 .silText {  
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Shadows Into Light', cursive !important;
 }
 .redText {
   color: "red";
@@ -168,7 +176,7 @@
 /* custom elements */
 .footerWrapper, .footerWrapper>div {
   color: #fff !important;
-  background-color: #707070
+  background-color: #707070;
 }
 .catTitleList {
   display: flex;
@@ -177,6 +185,16 @@
 }
 .noDot {
   list-style-type: none;
+}
+
+.appButtonWhite:hover {
+  background-color: #272674 !important;  /* Colors.batifisBlue */
+  color: #fff !important;
+}
+
+.appButtonBlue:hover {
+  background-color: #fff !important;
+  color: #272674 !important;
 }
 
 

@@ -1,34 +1,73 @@
+/* TODO : REBUILD AS A NORMAL */
+
 import React, {useState, useEffect} from 'react'
 import {Progress} from 'semantic-ui-react'
+import Utils from './constants/Utils'
 
 /**
- * 
- * @param {object} props
- *  #color {string} : enum color or 'auto' 
- *  #end {bool} : indicate success
+ * @dev #PROPS:
+ *  - incrementation {number} number of milliseconds between progress updates (default: 50)
+ *  - completed {bool} set progress to 100%
  */
-const AutoProgressBar = (props) => {
-    let [progress, setProgress] = useState(0)
-    const indicating = props.color && props.color === 'auto'
-    const color = !indicating && props.color
+class AutoProgressBar extends React.Component {
+    defaultState = {
+        incrementation: 50,
+        completed: false,
+        active: false,
+        progress: 0
+    }
 
-    console.log('indicating', indicating)
-    console.log('color', color)
+    state = this.defaultState
 
-    useEffect(() => {
-        if (progress < 100) {
-            setTimeout(() => {
-                setProgress(props.end ? 100 : progress >= 90 ? 90 : progress + 1)
-            }, 50)
+    componentDidMount() {
+        const {incrementation: incremProp} = this.props
+        const incrementation = incremProp || 50
+        this.setState({incrementation})
+    }
+
+    componentDidUpdate() {
+        console.log('AutoProgress didUpdate')
+        const {completed: completedState, incrementation: incremState, active, progress} = this.state;
+        const {completed, onCompleted, incrementation: incremProp, hide} = this.props;
+        const incrementation = incremProp || incremState 
+
+        if (!hide) {
+            if (this.props.active && !active && progress < 1 && !completed) {
+                this.setState({active: true})
+            }
+            else if (!completed && !completedState && active) {
+                progress < 90 && setTimeout(() => {
+                    let newProg = progress + 1
+                    this.setState({progress: newProg > 90 ? 90 : newProg})
+                }, incrementation);
+            } else if (active && completed) {
+                // is completed by still active
+                this.setState({active: false, completed: true})
+                typeof onCompleted === 'function' && onCompleted()
+            }
         }
-    })
 
-    return <Progress
-        //warning={progress < 100}
-        indicating={indicating}
-        percent={progress}
-        color={color}
-    />
+    }
+
+    render() {
+        const {progress, completed, active} = this.state
+        const color = this.props.color === 'auto' ? null : this.props.color
+
+        return (
+            progress < 1 || this.props.hide
+            ? null
+            : <Progress
+                active={active}
+                key={Utils.keyExtractor()}
+                indicating={!color}
+                percent={completed ? 100 : progress}
+                color={color}
+            />
+            
+        )
+    }
 }
+
+
 
 export default AutoProgressBar

@@ -3,6 +3,7 @@ import { Modal, Image, Loader, Button, Icon, Header } from 'semantic-ui-react'
 /**
  * Props List : 
  *   - title : change default title
+ *   - titleStyle : a style object for the title
  *   - subtitle : add a 2nd title as h4 above message
  *   - message : (any) *required* message to display (/!\ method throws if no message is provided)
  *   - messageClass
@@ -26,6 +27,7 @@ import { Modal, Image, Loader, Button, Icon, Header } from 'semantic-ui-react'
  *   - imageSize
  *   - closed : (bool) indicates if modal needs to be closed (default: false)
  *   - id : (string) sets an id for modal
+ *   - onClose {function} callback when log is over
  *   - onClickState : {Object} merge state while seting state when closeButton is clicked
  * 
  */
@@ -70,7 +72,8 @@ export default class Log extends Component {
 
     timer = (config, exit) => {
         setTimeout(() => {
-            this.setState(config)
+            this.setState(config);
+            typeof this.props.onClose === 'function' && this.props.onClose()
         }, exit)
     }
 
@@ -80,7 +83,7 @@ export default class Log extends Component {
 
     componentDidUpdate() {                          /* Define component update action */
         const {message, logMethod} = this.props
-        const {closed, endMsg, timedOutComponent} = this.state
+        const {closed, endMsg} = this.state
         if(message && closed && !endMsg)            // if message and closed prop and no endMsg request, open modal 
             this.setState({closed:false})
         else if(endMsg && message)                  // if endMsg request, close modal by passing an empty logConfig to App 
@@ -94,8 +97,8 @@ export default class Log extends Component {
         const { timedOutComponent } = this.state
         onClickState = onClickState || {}
         const _closeText = closeText || "Fermer";
-        console.log('closeText', closeText)
-        console.log('_closeText', _closeText)
+        // console.log('closeText', closeText)
+        // console.log('_closeText', _closeText)
         return(
             (closeButton || closeText) && !timedOutComponent
             ? <div className="centered" style={{marginBottom: 20}}>
@@ -161,13 +164,13 @@ export default class Log extends Component {
 
 
     render() { 
-        const {title, size, styleSheet, closed, classAttribute, id} = this.props
+        const {title, size, styleSheet, closed, classAttribute, id, titleStyle} = this.props
         console.log('Log props on render', this.props)
         return(
             <Modal id={id} open={!closed && !this.state.closed} style={{...styleSheet}} size={size} className={classAttribute.concat(' tekotxtall')} >
                 <Modal.Header>
                     {this.maybeShowIcon()}
-                    {title}
+                    <span style={titleStyle}>{title}</span>
                 </Modal.Header>
                 {this.maybeImageModalCore()}
                 <div className="padded" />

@@ -21,10 +21,10 @@ const ListItem = (props) => {
     } = props;
 
     const containersToCreate = [0, "leftElement", "rightElement", "title"].reduce((a, b) => props[b] ? a + 1 : a)
-    console.log('containersToCreate', containersToCreate)   // 2
+    //console.log('containersToCreate', containersToCreate)   // 2
 
     const flex = spaceEvenly && 1 / containersToCreate
-    console.log('flex', flex)                               // .5
+    //console.log('flex', flex)                               // .5
 
     const rowContainersStyle = (alignProp) => ({
         flex: flex || .33, 

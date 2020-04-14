@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Icon, Divider, Image, Header, Card, Grid, Button } from 'semantic-ui-react'
 import moment from 'moment'
-import Colors from './Colors'
+import Colors from './constants/Colors'
 import Layout from './Layout'
 import logo from './transparentLogo.png'
 import LegalMentions from './LegalMentions'
