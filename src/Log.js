@@ -73,7 +73,6 @@ export default class Log extends Component {
     timer = (config, exit) => {
         setTimeout(() => {
             this.setState(config);
-            typeof this.props.onClose === 'function' && this.props.onClose()
         }, exit)
     }
 
@@ -82,13 +81,14 @@ export default class Log extends Component {
     }
 
     componentDidUpdate() {                          /* Define component update action */
-        const {message, logMethod} = this.props
+        const {message, logMethod, onClose} = this.props
         const {closed, endMsg} = this.state
         if(message && closed && !endMsg)            // if message and closed prop and no endMsg request, open modal 
             this.setState({closed:false})
-        else if(endMsg && message)                  // if endMsg request, close modal by passing an empty logConfig to App 
-            logMethod({})
-
+        else if(endMsg && message) {                  // if endMsg request, close modal by passing an empty logConfig to App 
+            logMethod({});
+            typeof onClose === 'function' && onClose();
+        }
     }
 
 

@@ -70,6 +70,11 @@ class Home extends Component {
         }
     ]
 
+
+    categoriesOptions = this.categories.map(
+        ({key, title}) => ({key: key, text: title, value: {key, title}})
+    )
+
     reachRealisations = async() => {
         // get all realisations
         const carouselData = await Api.get('photos')
@@ -249,7 +254,7 @@ class Home extends Component {
                 {this.maybeLogMsg()}
                 {
                     displayIntranet
-                    ? <Intranet log={this.log.bind(this)} categories={this.categories} />
+                    ? <Intranet log={this.log.bind(this)} categories={this.categoriesOptions} />
                     : <div style={{zIndex: 1}}>
                         <div key="metas" style={{height: 0, color: 'transparent', zIndex: -1}}>
                             <p className="unselectable tt">
@@ -425,7 +430,7 @@ class Home extends Component {
                                 <Fade>
                                     <div className="silTextAll" id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
                                         <p style={{fontSize: Layout.bigTitleText, marginTop: 5}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
-                                        <div className="flexCenter row" style={{padding: '10vw'}}>
+                                        <div style={{padding: '5vw'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
                                             <Carousel data={this.state.carouselData}/>
                                         </div>  

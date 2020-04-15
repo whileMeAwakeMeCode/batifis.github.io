@@ -4,72 +4,71 @@ import AutoProgressBar from './AutoProgressBar';
 import Api from './constants/Api';
 import { Dropdown } from 'semantic-ui-react';
 import Layout from './Layout';
+import Colors from './constants/Colors';
 
-
-const CategorySelector = ({categories, onSelected}) => {
-    let [value, setValue] = useState(null)
-
-    const categoriesOptions = ({key, title}) => ({key: key, text: title, value: {key, title}}) 
-    const getOptions = () => (
-        categories
-        .map(categoriesOptions)
-        .filter((c) => JSON.stringify(value||" ").indexOf(c.key) < 0)
-    );
-
-    return <div className="flexCenter column" style={{height: '100%'}}>
-        <p className="flexCenter" style={{fontSize: Layout.bigTitleText}}>Sélectionnez les catégories correspondantes au groupe d'images</p>
-        <div className="flexCenter" style={{width: '100vw', height: 50}}>
-            <Dropdown 
-                fluid 
-                multiple 
-                selection 
-                placeholder='catégorie'
-                options={getOptions()} onChange={(_, {value}) => {console.log('setting value', value); setValue(value)} } onClose={() => onSelected(value)}
-            />
-        </div>
-    </div>
-}
 
 // Photos Uploader UI
-const Intranet = (props) => {
-    let [categories, setCategories] = useState(null)
-    let [completed, setCompleted] = useState(false)
-    let [incrementation, setIncrementation] = useState(50)
-    let [uploadingFiles, setUploadingFiles] = useState(false)
-    let [color, setColor] = useState('auto')
+class Intranet extends React.Component { 
+    defaultState = {
+        categories: null,           // {array} selected categories for image group
+        completed: false,           // {bool} upload progress is completed
+        incrementation: 50,         // {number} timeout for auto progress bar
+        uploadingFiles: false,      // {bool} indicate that files are being uploded
+        color: 'auto'               // {enum} color of the auto progress bar
+    }
 
-    const resetIntranet = () => {
+    state = this.defaultState
+   
+
+    resetIntranet = () => {
         console.log(' ---> resetting intranet view...')
-        setCategories(null);
-        setCompleted(false);
-        setColor('auto')
+        this.setCategorySelectorValue(null)
+        this.setState(this.defaultState)
+    }
+
+    CategorySelector = () => {
+        let [value, setValue] = useState(null)
+        this.setCategorySelectorValue = setValue.bind(this)
+                    
+        return <div className="flexCenter column" style={{height: '100%', backgroundColor: Colors.batifisBlue, color: Colors.white}}>
+            <p className="flexCenter silText" style={{fontSize: Layout.bigTitleText, paddingTop: 10}}>Sélectionnez les catégories correspondantes au groupe d'images</p>
+            <div className="flexCenter" style={{width: '100vw', height: 50}}>
+                <Dropdown 
+                    style={{width: '80vw', marginBottom: 10}} 
+                    multiple 
+                    selection 
+                    placeholder='catégorie'
+                    options={this.props.categories}
+                    value={value}
+                    onChange={(event, data) => setValue(data.value)} 
+                    onClose={() => this.setCategories(value)}
+                />
+            </div>
+        </div>
     }
     
-    const onImagesSelected = (_files) => {
-        const {acceptedFiles: files/*, fileSources*/} = _files
+    onImagesSelected = async({files:_files, resetFiles}) => {
+    
+        // do not allow upload is no categories set
+        this.state.categories && this.state.categories.length
+        ? (async() => {    
+            window.scrollTo(0, 0);
+            const {acceptedFiles: files} = _files
 
-        console.log(' ---> selected files ', files.length)
-
-        // calculate the loading time
-        setIncrementation(files.length * 10) // 30ms / file estimated
-
-        // wait for incremention to be set
-        setTimeout(async() => {      
             // indicate storage in progress
-            setUploadingFiles(true)
-
+            await this.setState({uploadingFiles: true, incrementation: files.length * 10})
+               
             // store to S3 via API
-            const upload = await Api.upload(files, categories)
-            console.log('upload', upload)
+            const upload = await Api.upload(files, this.state.categories)
 
             if (upload.status === 200) {
                 // indicate storage process success
-                setCompleted(true)
-                // wait 1scd before setting progress bar to inactive
+                this.setState({completed: true})
+                // wait 1.5scd before setting progress bar to inactive
                 setTimeout(() => {
                     const s = files.length > 1 ? "s" : ""
-                    setUploadingFiles(false);
-                    props.log({
+                    this.setState({uploadingFiles: false})
+                    this.props.log({
                         title: 'Succès',
                         titleStyle: {color: 'green'},
                         message: `${files.length} image${s} enregistrée${s}`,
@@ -77,14 +76,16 @@ const Intranet = (props) => {
                         iconColor: "green",
                         maxStay: 3000,
                         styleSheet: {textAlign: 'center'},
-                        onClose: resetIntranet.bind(this) 
+                        onClose: this.resetIntranet.bind(this) 
                     })
-                }, 1000)
+                    resetFiles()
+                }, 1500)
 
             } else {
-                setColor('red')
-                setCompleted(true)
-                props.log({
+               
+                this.setState({completed: true, color: 'red'})
+
+                this.props.log({
                     title: 'Erreur',
                     titleStyle: {color: 'red'},
                     message: upload.error || "Il y a eu une erreur lors de l'enregistrement de vos images. Veuillez réessayer, si le problème persiste, vérifiez votre connexion au réseau ou contactez le support",
@@ -97,66 +98,54 @@ const Intranet = (props) => {
                 })
 
                 setTimeout(() => {
-                    setUploadingFiles(false);
-                    setCompleted(false)
-                    setColor('auto')
+                    this.resetIntranet()
                 }, 1000)
             }
 
-        })
+        })()
+        : this.props.log({
+            title: 'Petit oubli...',
+            titleStyle: {color: Colors.black},
+            message: "Veuillez sélectionner au moins une catégorie",
+            messageStyle: {fontSize: Layout.titleText},
+            icon: 'warning sign',
+            iconColor: "orange",
+            stay: true,
+            closeButton: true,
+            closeText: "Ok",
+            styleSheet: {textAlign: 'center'}
+
+        });
        
     }
 
-    const uploadEnded = () => {
-        // file upload has ended event
-        console.log(' ---> upload has ended')
 
+    setCategories = (categories) => this.setState({categories})
+
+    render() {
+
+        const {incrementation, completed, color, uploadingFiles, categories} = this.state
+        const CategorySelector = this.CategorySelector
+        return (
+            <div>
+                {
+                    !uploadingFiles
+                    ? null
+                    : <AutoProgressBar
+                        color={color || 'auto'}
+                        completed={completed}
+                        incrementation={incrementation}
+                        active={uploadingFiles}
+                    />
+                }
+                <CategorySelector />
+                <FileSelector onSelected={this.onImagesSelected} categories={categories} />
+            </div>
+        )
     }
-
-    return (
-        <div>
-            {
-                !uploadingFiles
-                ? null
-                : <AutoProgressBar
-                    color={color || 'auto'}
-                    completed={completed}
-                    incrementation={incrementation}
-                    //incrementEvery={incrementation * 10}
-                    //hide={!uploadingFiles}
-                    active={uploadingFiles}
-                    onCompleted={uploadEnded}
-                />
-            }
-            {/* <AutoProgressBar
-                color={color || 'auto'}
-                completed={completed}
-                incrementation={incrementation}
-                //incrementEvery={incrementation * 10}
-                //hide={!uploadingFiles}
-                active={uploadingFiles}
-                onCompleted={uploadEnded}
-            /> */}
-            {
-                categories
-                ? <FileSelector onSelected={onImagesSelected} categories={categories} />
-                : <CategorySelector categories={props.categories} onSelected={setCategories} />
-            }
-        </div>
-    )
 
 }
 
 export default Intranet
 
 
-
-/* onImageSelected mockup */
-// setTimeout(() => setUploadingFiles(true))
-// setTimeout(() => {
-
-//     setCompleted(true)
-//     setTimeout(() => {
-//         setUploadingFiles(false)
-//     }, 1500)
-// }, 8000)

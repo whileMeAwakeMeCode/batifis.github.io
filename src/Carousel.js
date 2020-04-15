@@ -9,7 +9,7 @@ class Carousel extends Component {
 
     state = {
         settings: {
-            dots: true,
+            // dots: true,
             infinite: true,
             speed: 500,
             slidesToShow: 1,
@@ -19,7 +19,7 @@ class Carousel extends Component {
 
     renderItem = (img) => {
         console.log(' ---> renderItem img', img)
-        return <div><Image src={img} size="medium" /></div>
+        return <div style={{height: '70vh'}}><Image centered src={img.source} size="medium" /></div>
     }
 
     render() {
@@ -31,7 +31,7 @@ class Carousel extends Component {
             hasReachedData
             ? (hasData
                 ? <div>
-                    <Slider {...settings}>
+                    <Slider {...{...settings, dots: this.props.data.length < 10}}>  {/* maximum 10 dots */}
                         {
                             this.props.data.map(this.renderItem)
                         }
