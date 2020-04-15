@@ -2,16 +2,21 @@ import React from 'react'
 import { Header } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 
-const ListItem = (props) => {
+const ListItem = props => {
     const {
         containerStyle,     // {object} : style for the main container
+        containerClass,
         title,              // center component / text
         titleStyle,         // style for title container
+        titleClass,
         subTitle,           // subtitle component / text
         subTitleStyle,      // style for subTitle
+        subTitleClass,
+        contentWrapperStyle,// style object for title/subtitle Header wrapper
         contentStyle,       // title + subTitle style
         alignAll,           // {enum} 'left', 'center', 'right' : align text for all header containers
         leftElement,        // {element}
+        leftElementWrapperStyle,
         rightElement,       // {element}
         headerProps,        // {object} any semantic ui header props
         spaceEvenly,        // {bool} will use flex to create the required containers (ex.: leftElement + title will create only 2 containers) 
@@ -38,21 +43,21 @@ const ListItem = (props) => {
         alignItems: 'center'
     })
     
-    const ItemHeader = () => <div style={rowContainersStyle('center')}>
+    const ItemHeader = () => <div style={{...rowContainersStyle('center'), ...(contentWrapperStyle || {})}}>
         <Header
             style={contentStyle}
-            content={<div style={titleStyle}>{title}</div>}
-            subheader={<div style={subTitleStyle}>{subTitle}</div>}
+            content={<div className={titleClass} style={titleStyle}>{title}</div>}
+            subheader={<div className={subTitleClass} style={subTitleStyle}>{subTitle}</div>}
             {...headerProps}
         />
     </div>
 
     const firstBlockCondition = spaceEvenly && leftElement
 
-    return <div className="flexCenter row" style={containerStyle}>
+    return <div className={`flexCenter row ${containerClass || ''}`} style={containerStyle}>
         {
             !spaceEvenly || firstBlockCondition 
-            ? <div style={rowContainersStyle('left')}>
+            ? <div style={{...rowContainersStyle('left'), ...(leftElementWrapperStyle || {})}}>
                 {
                     leftElement || (spaceEvenly && <ItemHeader />)
                 }

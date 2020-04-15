@@ -3,18 +3,29 @@ import {useDropzone} from 'react-dropzone'
 import { Divider, Segment, Image, Icon, Button } from 'semantic-ui-react'
 import Colors from './constants/Colors'
 import Styles from './constants/Styles'
+import BadgeImage from './BadgeImage'
 
 const Dropzone = (props) => {
     
   const onDrop = useCallback(async(acceptedFiles) => {
-    
     const fileSourcesPromises = await Promise.resolve(
       acceptedFiles.map((af) => new Promise((_fileSource) => {
+        const img = new window.Image()
+        
 
         var fr = new FileReader();
+
         fr.onload = () => {
+          img.src = fr.result
+          console.log({
+            src: fr.result,
+            width: img.width,
+            height: img.height,
+          })
           _fileSource(fr.result);
         }
+
+
         fr.readAsDataURL(af);
 
       }))
@@ -41,8 +52,8 @@ const Dropzone = (props) => {
             <p className="gotuText">Déposez vos fichiers ici</p>
         </div>
         : <div className="clickable">
-            <Icon name="download" size="huge" />
-            <p className="gotuText">Glissez vos fichiers, ou cliquez ici pour en sélectionner</p>
+            <Icon name="download" size="huge" style={{color: Colors.anthracite}} />
+            <p className="gotuText anthracite">Glissez vos fichiers, ou cliquez ici pour en sélectionner</p>
         </div>
       }
     </div>
@@ -73,16 +84,12 @@ const FileSelector = (props) => {
   }
 
   const resetFiles = () => setFiles(defaultFiles)
+ 
 
-  const renderImage = (f) => <div 
-    className="shadow" 
-    style={{padding: 10, margin: 20, border: `solid 1px ${Colors.anthracite}`, borderRadius: 10, backgroundColor: Colors.white}}
-  >
-    <span className="clickable" style={{display: 'flex', flex: '1', justifyContent: 'flex-end', marginTop: -25, marginRight: -25}} onClick={() => removeImage(f)}>
-      <Icon circular inverted color="blue" name="close" />
-    </span>
-    <Image src={f} style={{height: '30vh', width: 'auto', maxWidth: '45vw', objectFit: 'contain', borderRadius: 5}} />
-  </div>
+  const renderImage = (source) => <BadgeImage
+    source={source}
+    onBadgeClick={() => removeImage(source)}
+  />
   
   return(
     <div className="flexCenter" style={{flexDirection: 'column', height: '100vh', backgroundColor: Colors.anthracite}}>

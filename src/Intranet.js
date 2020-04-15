@@ -2,12 +2,18 @@ import React, {useState} from 'react';
 import FileSelector from './FileSelector';
 import AutoProgressBar from './AutoProgressBar';
 import Api from './constants/Api';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Icon } from 'semantic-ui-react';
 import Layout from './Layout';
 import Colors from './constants/Colors';
+import ListItem from './ListItem';
 
 
 // Photos Uploader UI
+
+/**
+ * #Props :
+ *  - closeIntranet {function} allow Intranet window closure
+ */
 class Intranet extends React.Component { 
     defaultState = {
         categories: null,           // {array} selected categories for image group
@@ -26,12 +32,26 @@ class Intranet extends React.Component {
         this.setState(this.defaultState)
     }
 
+    closeIntranet = () => typeof this.props.closeIntranet === 'function' && this.props.closeIntranet()
+
     CategorySelector = () => {
         let [value, setValue] = useState(null)
         this.setCategorySelectorValue = setValue.bind(this)
-                    
+                     
         return <div className="flexCenter column" style={{height: '100%', backgroundColor: Colors.batifisBlue, color: Colors.white}}>
-            <p className="flexCenter silText" style={{fontSize: Layout.bigTitleText, paddingTop: 10}}>Sélectionnez les catégories correspondantes au groupe d'images</p>
+            {/* <p className="flexCenter silText" style={{fontSize: Layout.bigTitleText, paddingTop: 10}}>Sélectionnez les catégories correspondantes au groupe d'images</p> */}
+            <ListItem   
+                spaceEvenly
+                title="Sélectionnez les catégories correspondantes au groupe d'images"
+                titleClass="flexCenter silText white"
+                contentStyle={{fontSize: Layout.isSmallDevice ? '1em' : '2em'}}
+                containerStyle={{paddingTop: "1%", paddingBottom: '1%', width: '100vw'}}
+                leftElement={<Icon onClick={this.closeIntranet} className="clickable" name="chevron left" color={Colors.white} size='large' style={{marginLeft: 10, marginTop: Layout.isSmallDevice ? 0 : 40}} />}
+                leftContainerAlign='left'
+                leftElementWrapperStyle={{flex: .1}}
+                contentWrapperStyle={{flex: .9, padding: 20}}
+                rightContainerAlign={'center'}
+            />
             <div className="flexCenter" style={{width: '100vw', height: 50}}>
                 <Dropdown 
                     style={{width: '80vw', marginBottom: 10}} 

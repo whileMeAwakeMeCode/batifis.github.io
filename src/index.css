@@ -113,7 +113,11 @@
   flex-wrap: nowrap;
 }
 .wrap {
-  flex-wrap: wrap
+  flex-wrap: wrap !important;
+}
+
+.preWrap {
+  white-space: pre
 }
 
 
@@ -165,6 +169,9 @@
 }
 .white, .white>* {
   color: #fff !important
+}
+.anthracite {
+  color: #707070 !important
 }
 .tt {
   color: transparent !important

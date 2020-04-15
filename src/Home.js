@@ -1,7 +1,7 @@
 /* Packages */
 import React, {Component} from 'react'
 import { Parallax } from 'react-parallax'
-import {Image, Modal, Form, Button} from 'semantic-ui-react'
+import {Image, Modal, Form, Button, Icon} from 'semantic-ui-react'
 // effects
 import Fade from 'react-reveal/Fade';
 import Slide from 'react-reveal/Slide';   
@@ -25,6 +25,7 @@ import Footer from './Footer';
 import CustomIcon from './CustomIcon';
 import Crypto from './Crypto';
 import Styles from './constants/Styles';
+import Utils from './constants/Utils';
 
 
 class Home extends Component {
@@ -93,7 +94,10 @@ class Home extends Component {
 
 
     toggleLogger = () => this.setState({loggerOpened: !this.state.loggerOpened})
-    toggleIntranet = () => this.setState({displayIntranet: !this.state.displayIntranet})
+    toggleIntranet = () => {
+        window.scrollTo(0, 0)
+        this.setState({ displayIntranet: !this.state.displayIntranet, loggerOpened: false })
+    }
 
     login = async() => {
         console.log(' ---> trying to log client')
@@ -240,7 +244,11 @@ class Home extends Component {
 
     setEmail = (_, {value:email}) => this.setState({email, loginError: false, loginProcessing: false})
     setHash = (_, {value:pwd}) => this.setState({pwd, loginError: false, loginProcessing: false})
-
+    closeIntranetUpdateList = async() => {
+        this.toggleIntranet()
+        this.reachRealisations()
+    }
+    intranetOrLogger = () => this.state.connected ? this.toggleIntranet() : this.toggleLogger()
 
     render() {
         console.log('render email', this.state.email)
@@ -254,7 +262,7 @@ class Home extends Component {
                 {this.maybeLogMsg()}
                 {
                     displayIntranet
-                    ? <Intranet log={this.log.bind(this)} categories={this.categoriesOptions} />
+                    ? <Intranet log={this.log.bind(this)} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
                     : <div style={{zIndex: 1}}>
                         <div key="metas" style={{height: 0, color: 'transparent', zIndex: -1}}>
                             <p className="unselectable tt">
@@ -333,24 +341,25 @@ class Home extends Component {
                         >
                             <div style={{height: '50vh'}}>
                                 <div className="flexRow flexStart" style={{height: 30}}>
-                                    <div className="flexStart spaceAround noWrap" style={{flex: isSmallDevice ? .5 : .3, fontSize: 17, color: "#0d11db"}}>    
+                                    <div className="flexStart spaceAround noWrap" style={{flex: isSmallDevice ? .3 : .2, fontSize: 17, color: "#0d11db"}}>    
 
                                         <div 
-                                            className="boldOnHover silText"
+                                            className="boldOnHover silText clickable"
                                             style={{color: Colors.white}}
                                             //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
-                                            onClick={this.toggleLogger}
+                                            onClick={this.intranetOrLogger}
                                         >
-                                            Connexion
+                                            <Icon name={connected ? "user outline" : "id card outline"} color={Colors.white} />
                                         </div>
-
+                                            
                                         <a 
-                                            className="boldOnHover silText white"
+                                            className="boldOnHover silText white clickable"
                                             //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                             href='mailto:contact@batifis.fr'
                     
                                         >
-                                            Nous contacter  
+                                            
+                                            <Icon name="envelope" color={Colors.white} />
                                         </a>
                                     </div>
                                 </div>
@@ -429,8 +438,8 @@ class Home extends Component {
                             <Slide right>
                                 <Fade>
                                     <div className="silTextAll" id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                                        <p style={{fontSize: Layout.bigTitleText, marginTop: 5}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
-                                        <div style={{padding: '5vw'}}>
+                                        <p style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
+                                        <div style={{padding: '2em'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
                                             <Carousel data={this.state.carouselData}/>
                                         </div>  
@@ -453,7 +462,7 @@ class Home extends Component {
 
                             </div> */}
                             <div className="footerWrapper" style={{backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
-                                <Footer modalOpener={this.log.bind(this)} toggleLogger={this.toggleLogger.bind(this)}/>
+                                <Footer modalOpener={this.log.bind(this)} toggleLogger={this.intranetOrLogger}/>
                             </div>
                         </div>
                     </div>

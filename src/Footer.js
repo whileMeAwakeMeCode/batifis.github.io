@@ -53,7 +53,7 @@ class Footer extends Component {
                             <div className="clickable ui center aligned white small header" onClick={this.logLegalMentions}><h4>Mentions légales</h4></div>
 
                             <div className="ui mid divider"></div>
-                            <div onClick={this.props.toggleLogger} className="clickable ui center aligned white small header"><h4>Connexion membre</h4></div>
+                            <div onClick={this.props.toggleLogger} className="clickable ui center aligned white small header"><h4>Administration</h4></div>
 
 
                             <div className="ui mid divider"></div>

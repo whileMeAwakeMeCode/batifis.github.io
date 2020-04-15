@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Image, Loader } from 'semantic-ui-react';
 import Utils from './constants/Utils';
+import BadgeImage from './BadgeImage';
 
 class Carousel extends Component {
 
@@ -17,9 +18,29 @@ class Carousel extends Component {
         }
     }
 
+    removeFromPhotos = () => {
+        //set progress bar on top of "Réalisation title"
+    }
+
+    // renderItem = (img) => {
+    //     console.log(' ---> renderItem img', img)
+    //     return <div style={{height: '70vh'}}><Image centered src={img.source} style={{height: '70vh', width: 'auto', maxWidth: '70vw', objectFit: 'contain'}} /></div>
+    // }
+
     renderItem = (img) => {
-        console.log(' ---> renderItem img', img)
-        return <div style={{height: '70vh'}}><Image centered src={img.source} size="medium" /></div>
+        console.log(' ---> render slide img', img)
+        
+        const width = '50%'
+        
+        return <BadgeImage
+            shadow={false}
+            className="shadow"
+            source={img.source}
+            onBadgeClick={() => this.removeFromPhotos(img.source)}
+            imageSize={{height: '70vh', width: 'auto', maxWidth: '70vw'}}
+            containerStyle={{borderRadius: 10, padding: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}
+            badgeContainerStyle={{width}}
+        />
     }
 
     render() {
