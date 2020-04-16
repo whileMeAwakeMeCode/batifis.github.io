@@ -16,6 +16,7 @@ import Intranet from './Intranet'
 /* Constants */
 import Layout from './Layout'
 import Api from '../constants/Api'
+import { protectImages } from '../constants/ImageProtector'
 
 /* Images */
 import logo from '../images/logo.png';
@@ -86,6 +87,10 @@ class Home extends Component {
     async componentDidMount() {
         
         this.reachRealisations()
+        
+        protectImages()
+
+        
         // RAT :
         // const MehmetHash = await Crypto.encrypt(`batifice@laposte.net::Batifis@2020$`, true)
         // console.log(' ===> MehmetHash', MehmetHash)

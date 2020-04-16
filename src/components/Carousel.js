@@ -45,7 +45,7 @@ class Carousel extends Component {
             maxHeight: Layout.height * .7,   // 70vh
             maxWidth: Math.round(Layout.width * .7)
         })
-        return this.props.admin ? <BadgeImage
+        return this.props.admin === true ? <BadgeImage
             shadow={false}
             className="shadow"
             source={img.source}
