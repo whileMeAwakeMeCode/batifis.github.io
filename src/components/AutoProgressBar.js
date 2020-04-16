@@ -1,8 +1,8 @@
 /* TODO : REBUILD AS A NORMAL */
 
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {Progress} from 'semantic-ui-react'
-import Utils from './constants/Utils'
+import Utils from '../constants/Utils'
 
 /**
  * @dev #PROPS:
@@ -26,7 +26,6 @@ class AutoProgressBar extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('AutoProgress didUpdate')
         const {completed: completedState, incrementation: incremState, active, progress} = this.state;
         const {completed, onCompleted, incrementation: incremProp, hide} = this.props;
         const incrementation = incremProp || incremState 

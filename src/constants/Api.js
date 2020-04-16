@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const API_URL_PROD = "https://batifis.herokuapp.com"
+//const API_URL_PROD = "https://batifis.herokuapp.com"
 const API_URL_DEV = "http://localhost:3001"
 
 const Api = {
@@ -8,7 +8,6 @@ const Api = {
     get : async(dirName) => {
         try {
             const url = await Promise.resolve(`${API_URL_DEV}/${dirName}`)
-            console.log(` ---> trying to get ${dirName} from url ${url}`)
 
             const fetchResponse = await fetch(url, {method: 'GET'})
             const data = await fetchResponse.json()
@@ -28,17 +27,14 @@ const Api = {
      */
     upload : async(files, imageDatas) => {
         try {
-            console.log(` ---> trying to upload ${files.length} files...`, files)
             const data = await new Promise(async(resolve,reject)=>{
                 let formData = new FormData();
             
                 files.forEach(async(value,index) => {
-                    console.log(' ---> appending value', value)
                     await Promise.resolve(
                         formData.append('fileData', files[index])
                     )
                     if(index===files.length-1){
-                        console.log('*exiting*', formData)
                         resolve(formData);
                     }
                 })
@@ -48,7 +44,6 @@ const Api = {
             data.append('imageDatas', JSON.stringify(noB64ImagesDatas))
 
 
-            console.log(' ---> upload data', data)
 
             const axiosResponse = await Axios({
                 method: "post",
@@ -57,7 +52,6 @@ const Api = {
                 config: { headers: { "Content-Type": "multipart/form-data" } }
             })
 
-            console.log(' ---> upload axiosResponse', axiosResponse)
 
             return axiosResponse
 
@@ -69,7 +63,6 @@ const Api = {
 
     remove : async(source) => {
         try {
-            console.log('trying to remove source', source)
             const axiosParams = await Promise.resolve({
                 method: "post",
                 url: `${API_URL_DEV}/remove`,

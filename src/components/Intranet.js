@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import FileSelector from './FileSelector';
 import AutoProgressBar from './AutoProgressBar';
-import Api from './constants/Api';
+import Api from '../constants/Api';
 import { Dropdown, Icon } from 'semantic-ui-react';
 import Layout from './Layout';
-import Colors from './constants/Colors';
+import Colors from '../constants/Colors';
 import ListItem from './ListItem';
 
 
@@ -27,7 +27,6 @@ class Intranet extends React.Component {
    
 
     resetIntranet = () => {
-        console.log(' ---> resetting intranet view...')
         this.setCategorySelectorValue(null)
         this.setState(this.defaultState)
     }

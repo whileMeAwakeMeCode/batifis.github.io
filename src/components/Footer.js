@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Icon, Divider, Image, Header, Card, Grid, Button } from 'semantic-ui-react'
-import moment from 'moment'
-import Colors from './constants/Colors'
+import { Icon, Divider, Image } from 'semantic-ui-react'
+import Colors from '../constants/Colors'
 import Layout from './Layout'
-import logo from './transparentLogo.png'
+import logo from '../images/transparentLogo.png'
 import LegalMentions from './LegalMentions'
 
 const AppLogo = (props) => <Image {...props} centered src={logo} size="small" />
@@ -69,7 +68,7 @@ class Footer extends Component {
                             <AppLogo size="small" className="shake-horizontal"/>
                             <Divider />
                             <div className="flexCenter spaceAround" style={isSmallDevice ? {flexDirection: "column", padding: '.1em'} : undefined}>
-                                <Image src={require("./ffb.png")} className="clickable" alt="fédération francaise du batiment" size="small" href="https://www.ffbatiment.fr/" target="_blank" rel="noopener noreferrer"/>                               
+                                <Image src={require("../images/ffb.png")} className="clickable" alt="fédération francaise du batiment" size="small" href="https://www.ffbatiment.fr/" target="_blank" rel="noopener noreferrer"/>                               
                                 <Image src="https://www.lemoniteur.fr/mediatheque/9/0/8/001402809.png" alt="site internet qualibat" className="clickable" style={isSmallDevice ? {} : {marginTop:"2%", padding:"3px", borderRadius:"7px", height:"75px", width:"75px", objectFit:"cover"}} href="https://www.qualibat.com/" target="_blank" rel="noopener noreferrer" />
                                
                             </div>
@@ -106,7 +105,7 @@ class Footer extends Component {
 
                         <div className="ui sixteen wide column">
                             <div className='flexCenter spaceAround' style={{backgroundColor: Colors.batifisGrey, width: '100vw', padding: 20}}>
-                                <Image src={require("./local_business.png")} alt="entreprise 80700 roye" size="small"/>
+                                <Image src={require("../images/local_business.png")} alt="entreprise 80700 roye" size="small"/>
                                 <Image src="https://workandup-dev.s3.eu-west-3.amazonaws.com/IMAGES/villederoye.png" alt="ville de roye" size="tiny" href="https://roye.eu" target="_blank" rel="noopener noreferrer" />       
                                 <Image src="http://cdn1_2.reseaudesvilles.fr/cities/336/logo/VMeRi2FUcIpizBx.png" alt="ville de péronne" size="small" href="https://ville-peronne.fr" target="_blank" rel="noopener noreferrer" />       
                             </div>  {/* http://cdn1_2.reseaudesvilles.fr/cities/336/logo/VMeRi2FUcIpizBx.png*/}

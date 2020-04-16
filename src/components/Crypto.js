@@ -1,5 +1,5 @@
 import cryptoJSON from 'crypto-json'
-import Utils from './constants/Utils'
+import Utils from '../constants/Utils'
 const JSON_algorithm = 'camellia-128-cbc'    
 const encoding = 'hex'
 const JSON_encrypt_pwd = "sdf45$TG34F9_34xD€24f9/j94FJZXg349J02x"
@@ -65,7 +65,7 @@ const stringifyKeys = (obj, keys) => {
    
        let newObj = {}
        
-       keys.map((key) => {
+       keys.forEach((key) => {
            if (key) {
                newObj[key] = 
                Object.keys(obj[key]) ?
@@ -131,7 +131,7 @@ export default {
     
     /** @notice /!\ IMPORTANT /!\
     * THINK TO JSON.PARSE any object that is nested (inside another object) as it has been stringified before encryption:
-    * eg.:  console.log('\n* DECRYPTED *\n%s\n', JSON.parse(decrypted.configFile).purchasedVersion)
+    * eg.:  JSON.parse(decrypted.configFile).purchasedVersion
     */
     /**
      * @dev Decrypt any JSON object 

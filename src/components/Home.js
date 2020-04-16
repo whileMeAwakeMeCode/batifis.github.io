@@ -15,18 +15,16 @@ import Intranet from './Intranet'
 
 /* Constants */
 import Layout from './Layout'
-import Api from './constants/Api'
+import Api from '../constants/Api'
 
 /* Images */
-import logo from './logo.png';
-import transparentLogo from './transparentLogo.png';
-import Colors from './constants/Colors';
+import logo from '../images/logo.png';
+import transparentLogo from '../images/transparentLogo.png';
+import Colors from '../constants/Colors';
 import Footer from './Footer';
 import CustomIcon from './CustomIcon';
 import Crypto from './Crypto';
-import Styles from './constants/Styles';
-import Utils from './constants/Utils';
-
+import Styles from '../constants/Styles';
 
 class Home extends Component {
     state = {
@@ -79,7 +77,6 @@ class Home extends Component {
     reachRealisations = async() => {
         // get all realisations
         const carouselData = await Api.get('photos')
-        console.log('carouselData', carouselData || 'no carousel data')
         this.setState({carouselData})       
     }
 
@@ -100,7 +97,6 @@ class Home extends Component {
     }
 
     login = async() => {
-        console.log(' ---> trying to log client')
         const {email, pwd, connected} = this.state
         if (connected) window.alert('Vous êtes déjà connecté !')
         else {
@@ -113,12 +109,9 @@ class Home extends Component {
             })
            
             const hash = await Crypto.encrypt(`${email}::${pwd}`, true)
-            console.log('hash', hash)
             const isAdm = await Promise.resolve(
                 getAdmhash() === hash
             )
-
-            console.log('* isAdm *', isAdm)
        
         
             this.setState({connected: isAdm, loginProcessing: isAdm || false, loginError: !isAdm, intranetActivated: !isAdm})
@@ -150,7 +143,6 @@ class Home extends Component {
     }
 
     log = (log) => {
-        console.log(' ---> login message', log.title || log.message ? `${log.message.slice(0, 10)}...` : "no message")
         this.setState({log, loggerOpened: !this.state.loginError ? false : this.state.loggerOpened})
     }
     
@@ -160,7 +152,6 @@ class Home extends Component {
         var { message, title, classAttribute, maxStay/*, icon, iconStyle, iconColor, activityIndicator, stay, closeButton, timedOutComponent */} = log || {}
         maxStay = parseInt(maxStay);   // make sure we deal with a number type variable
         const displayLog = message || title
-        //console.log(' ---> displayLog', displayLog)
         return(
             displayLog 
             ? <Log 
@@ -184,7 +175,6 @@ class Home extends Component {
     }
 
     scrollTo = (route) => {
-        console.log('scrolling to')
         window.location.href = `/#${route}`
     }
 
@@ -258,11 +248,11 @@ class Home extends Component {
                 // update carouselData from server response
                 const {data: carouselData} = removal;
                 this.setState({carouselData})
-                
-            } else throw(`removal operation failed with status ${removal.status}`)
+
+            } else throw(Error(`removal operation failed with status ${removal.status}`))
 
         }catch(e) {
-            console.log(' ---> Home -> removeImageSource -> error : ', e)
+            console.log('removeImageSource')
             this.log({
                 title: 'Erreur',
                 titleStyle: {color: Colors.anthracite},
@@ -279,7 +269,6 @@ class Home extends Component {
     }
 
     render() {
-        //console.log('render email', this.state.email)
         const {isSmallDevice} = Layout
         const {loginProcessing, connected, activeCategory, loginError, displayIntranet} = this.state
         const anthracite = "#818181"
@@ -362,7 +351,7 @@ class Home extends Component {
                         </Modal>
                         <Parallax
                             blur={0}
-                            bgImage={require('./photo0.jpg')}
+                            bgImage={require('../photo0.jpg')}
                             bgImageAlt="batifis"
                             bgImageStyle={{height: '50vh', width: '100vw', objectFit: 'cover', opacity: .8}}
                             strength={isSmallDevice ? 100 : 300}

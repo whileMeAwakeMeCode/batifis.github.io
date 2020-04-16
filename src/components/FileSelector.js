@@ -1,18 +1,20 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
-import { Divider, Segment, Image, Icon, Button } from 'semantic-ui-react'
-import Colors from './constants/Colors'
-import Styles from './constants/Styles'
+import { Icon, Button } from 'semantic-ui-react'
+import Colors from '../constants/Colors'
+import Styles from '../constants/Styles'
 import BadgeImage from './BadgeImage'
 
 /**
  * 
  * @param props
  */
-const Dropzone = (props) => {
+const Dropzone = ({setFiles: _setFiles}) => {
   
   const onDrop = useCallback(async(acceptedFiles) => {
-    
+    function setFiles(fileData) {
+      _setFiles(fileData)
+    }
     const imageDatasPromises = await Promise.resolve(
       acceptedFiles.map((af) => new Promise((_imageDatas) => {
         const img = new window.Image()
@@ -45,12 +47,10 @@ const Dropzone = (props) => {
     
     const imageDatas = await Promise.all(imageDatasPromises)
 
-    console.log('imageDatas', imageDatas)
-
     // Do something with the files
-    props.setFiles({acceptedFiles, imageDatas})
-
-  }, [])
+    setFiles({acceptedFiles, imageDatas})
+      
+  }, [_setFiles])
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 

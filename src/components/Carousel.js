@@ -2,23 +2,23 @@ import React, {Component} from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { Image, Loader } from 'semantic-ui-react';
-import Utils from './constants/Utils';
+import { Loader } from 'semantic-ui-react';
+import Utils from '../constants/Utils';
 import Layout from './Layout';
 import BadgeImage from './BadgeImage';
 
 const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
     const delta = Math.round(Utils.percentOf(height - maxHeight, height)) // 396 - 413 = -4
     const autoWidth = Math.round(width - Utils.percentage(delta, width))  // 930 - (-4, 930) = 967
-    console.log(`
-    == auto width calculation ==
-    width: ${width}
-    height: ${height}
-    maxHeight: ${maxHeight}
-    maxWidth: ${maxWidth}
-    delta: ${delta}
-    autoWidth: ${autoWidth}
-    `)
+    // console.log(`
+    // == auto width calculation ==
+    // width: ${width}
+    // height: ${height}
+    // maxHeight: ${maxHeight}
+    // maxWidth: ${maxWidth}
+    // delta: ${delta}
+    // autoWidth: ${autoWidth}
+    // `)
 
     return autoWidth > maxWidth ? maxWidth : autoWidth
 }	
@@ -27,7 +27,6 @@ class Carousel extends Component {
 
     state = {
         settings: {
-            // dots: true,
             infinite: true,
             speed: 500,
             slidesToShow: 1,
@@ -39,7 +38,6 @@ class Carousel extends Component {
 
 
     renderItem = (img) => {
-        //console.log(' ---> render slide img', img)
         
         const badgeWrapWidth = getImageAutoWidth({
             width: img.width,
@@ -58,9 +56,6 @@ class Carousel extends Component {
                 width: badgeWrapWidth,
                 marginBottom: -10,
                 zIndex: 2
-                // position: 'absolute',
-                // top: 30,
-                // zIndex: 2
             }}
         />
     }
