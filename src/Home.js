@@ -160,7 +160,7 @@ class Home extends Component {
         var { message, title, classAttribute, maxStay/*, icon, iconStyle, iconColor, activityIndicator, stay, closeButton, timedOutComponent */} = log || {}
         maxStay = parseInt(maxStay);   // make sure we deal with a number type variable
         const displayLog = message || title
-        console.log(' ---> displayLog', displayLog)
+        //console.log(' ---> displayLog', displayLog)
         return(
             displayLog 
             ? <Log 
@@ -250,8 +250,36 @@ class Home extends Component {
     }
     intranetOrLogger = () => this.state.connected ? this.toggleIntranet() : this.toggleLogger()
 
+    removeImageSource = async(source) => {
+        //set progress bar on top of "Réalisation title"
+        try {
+            const removal = await Api.remove(source)
+            if (removal.status === 200) {
+                // update carouselData from server response
+                const {data: carouselData} = removal;
+                this.setState({carouselData})
+                
+            } else throw(`removal operation failed with status ${removal.status}`)
+
+        }catch(e) {
+            console.log(' ---> Home -> removeImageSource -> error : ', e)
+            this.log({
+                title: 'Erreur',
+                titleStyle: {color: Colors.anthracite},
+                message: 'Il y a eu une erreur lors de la suppression de votre image, veuillez réessayer. Si le problème persiste, contactez le support',
+                icon: 'close',
+                iconStyle: {color: 'red'},
+                stay: true,
+                size: 'small',
+                closeButton: true,
+                closeText: 'Ok',
+                styleSheet: {textAlign: 'center'}
+            });
+        }
+    }
+
     render() {
-        console.log('render email', this.state.email)
+        //console.log('render email', this.state.email)
         const {isSmallDevice} = Layout
         const {loginProcessing, connected, activeCategory, loginError, displayIntranet} = this.state
         const anthracite = "#818181"
@@ -441,7 +469,7 @@ class Home extends Component {
                                         <p style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
                                         <div style={{padding: '2em'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
-                                            <Carousel data={this.state.carouselData}/>
+                                            <Carousel data={this.state.carouselData} removeSource={this.removeImageSource} />
                                         </div>  
                                         {
                                             activeCategory

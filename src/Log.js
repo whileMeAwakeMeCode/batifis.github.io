@@ -165,7 +165,7 @@ export default class Log extends Component {
 
     render() { 
         const {title, size, styleSheet, closed, classAttribute, id, titleStyle} = this.props
-        console.log('Log props on render', this.props)
+        //console.log('Log props on render', this.props)
         return(
             <Modal id={id} open={!closed && !this.state.closed} style={{...styleSheet}} size={size} className={classAttribute.concat(' tekotxtall')} >
                 <Modal.Header>

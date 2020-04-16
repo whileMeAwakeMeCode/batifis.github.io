@@ -21,7 +21,12 @@ const Utils = {
                 : t
             )
         )
-    }
+    },
+    percentOf: (part, total) => (100 / (total / part)),	// (4, 16) = 25
+    percentage: (percent, number) => (
+        (number / 100) * percent
+    ),
+    
 }
 
 export default Utils

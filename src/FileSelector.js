@@ -5,38 +5,50 @@ import Colors from './constants/Colors'
 import Styles from './constants/Styles'
 import BadgeImage from './BadgeImage'
 
+/**
+ * 
+ * @param props
+ */
 const Dropzone = (props) => {
-    
+  
   const onDrop = useCallback(async(acceptedFiles) => {
-    const fileSourcesPromises = await Promise.resolve(
-      acceptedFiles.map((af) => new Promise((_fileSource) => {
+    
+    const imageDatasPromises = await Promise.resolve(
+      acceptedFiles.map((af) => new Promise((_imageDatas) => {
         const img = new window.Image()
         
-
         var fr = new FileReader();
 
-        fr.onload = () => {
-          img.src = fr.result
-          console.log({
-            src: fr.result,
-            width: img.width,
-            height: img.height,
-          })
-          _fileSource(fr.result);
-        }
+        fr.onload = async() => {
+          img.src = await Promise.resolve(fr.result)
 
+          // wait for img to be read
+          setTimeout(async() => {
+            const imageDatas = await Promise.resolve({
+              name: af.name,
+              source: fr.result,
+              //width: img.naturalWidth || img.width || ((i) => i.width )(img),
+              //height: img.naturalHeight || img.height,
+              width: ((i) => i.width)(img),
+              height: ((i) => i.height)(img)
+            })
+  
+            //_fileSource(fr.result);
+            _imageDatas(imageDatas)
+          })
+        }
 
         fr.readAsDataURL(af);
 
       }))
     )
     
-    const fileSources = await Promise.all(fileSourcesPromises)
+    const imageDatas = await Promise.all(imageDatasPromises)
 
-   // console.log('fileSources', fileSources)
+    console.log('imageDatas', imageDatas)
 
     // Do something with the files
-    props.setFiles({acceptedFiles, fileSources})
+    props.setFiles({acceptedFiles, imageDatas})
 
   }, [])
 
@@ -64,29 +76,30 @@ const Dropzone = (props) => {
  * 
  * @param {object} props
  *  # onSelected {function} files=>{} where typeof files param is array
+ *  #categories
  */
 const FileSelector = (props) => {
-  const defaultFiles = {acceptedFiles: [], fileSources: []};
+  const defaultFiles = {acceptedFiles: [], imageDatas: []};
   let [files, setFiles] = useState(defaultFiles);
 
-  const removeImage = async(file) => {
-    const fileSources = await Promise.resolve(
-      files.fileSources.filter((f) => f !== file)
+  const removeImage = async(src) => {
+    const imageDatas = await Promise.resolve(
+      files.imageDatas.filter((idta) => idta.source !== src)
     )
     // todo : remove from acceptedFiles
-    setFiles({acceptedFiles: files.acceptedFiles, fileSources})
+    setFiles({acceptedFiles: files.acceptedFiles, imageDatas})
   }
 
   const sendImages = () => {
     if (props && typeof props.onSelected === 'function') {
-      props.onSelected({files, resetFiles}) // ({acceptedFiles, fileSources}, resetFiles) 
+      props.onSelected({files, resetFiles}) // ({acceptedFiles, imageDatas}, resetFiles) 
     } else console.error('FileSelector > sendImages > error : invalid "onSelected" prop')
   }
 
   const resetFiles = () => setFiles(defaultFiles)
  
 
-  const renderImage = (source) => <BadgeImage
+  const renderImage = ({source}) => <BadgeImage
     source={source}
     onBadgeClick={() => removeImage(source)}
   />
@@ -104,7 +117,7 @@ const FileSelector = (props) => {
       <div className="flexCenter" style={{flex: /* props.categories ? .7 :  */.8, overflow: 'scroll'}}>
         <div className="flexRow wrap" style={{width:'100vw', backgroundColor: Colors.anthracite, justifyContent: 'center'}}>
             {
-              files.fileSources.length ? files.fileSources.map(renderImage) : null
+              files.imageDatas.length ? files.imageDatas.map(renderImage) : null
             }
         </div>
       </div>

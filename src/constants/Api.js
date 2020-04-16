@@ -26,13 +26,11 @@ const Api = {
     /**
      * @param {Array} files : an array of File object to pass to api/upload post handler (will compute a FormData object)
      */
-    upload : async(files, categories) => {
+    upload : async(files, imageDatas) => {
         try {
             console.log(` ---> trying to upload ${files.length} files...`, files)
-
             const data = await new Promise(async(resolve,reject)=>{
                 let formData = new FormData();
-                formData.append('categories', categories)
             
                 files.forEach(async(value,index) => {
                     console.log(' ---> appending value', value)
@@ -45,6 +43,10 @@ const Api = {
                     }
                 })
             })
+
+            const noB64ImagesDatas = await Promise.resolve(imageDatas.map((idta) => ({...idta, source: null})))
+            data.append('imageDatas', JSON.stringify(noB64ImagesDatas))
+
 
             console.log(' ---> upload data', data)
 
@@ -62,6 +64,27 @@ const Api = {
         }catch(e) {
             console.log('Api put error', e)
             return false
+        }
+    },
+
+    remove : async(source) => {
+        try {
+            console.log('trying to remove source', source)
+            const axiosParams = await Promise.resolve({
+                method: "post",
+                url: `${API_URL_DEV}/remove`,
+                data: { source },   // FormData
+                //config: { headers: { "Content-Type": "application/json" } }
+            })
+
+            const axiosResponse = await Axios(axiosParams)
+
+
+            return axiosResponse
+        }catch(e) {
+            const errMsg = `Api -> remove error : error while removing source ${source}`
+            console.error(errMsg, e)
+            throw(errMsg)
         }
     }
 
