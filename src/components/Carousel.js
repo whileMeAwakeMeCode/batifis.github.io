@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { Loader } from 'semantic-ui-react';
+import { Loader, Image } from 'semantic-ui-react';
 import Utils from '../constants/Utils';
 import Layout from './Layout';
 import BadgeImage from './BadgeImage';
@@ -45,7 +45,7 @@ class Carousel extends Component {
             maxHeight: Layout.height * .7,   // 70vh
             maxWidth: Math.round(Layout.width * .7)
         })
-        return <BadgeImage
+        return this.props.admin ? <BadgeImage
             shadow={false}
             className="shadow"
             source={img.source}
@@ -58,6 +58,11 @@ class Carousel extends Component {
                 zIndex: 2
             }}
         />
+        : <div>
+            <Image centered className="shadow" src={img.source} style={{height: '70vh', width: 'auto', maxWidth: '70vw', objectFit: 'contain', borderRadius: 5}} />
+            <div style={{height: 20}} />
+        </div>
+        
     }
 
     render() {

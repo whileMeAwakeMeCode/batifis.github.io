@@ -1,13 +1,11 @@
 import Axios from 'axios'
 
-//const API_URL_PROD = "https://batifis.herokuapp.com"
-const API_URL_DEV = "http://localhost:3001"
-
+const API_URL = window.location.hostname === "localhost" ? "http://localhost:3001" : "https://batifis.herokuapp.com"
 const Api = {
 
     get : async(dirName) => {
         try {
-            const url = await Promise.resolve(`${API_URL_DEV}/${dirName}`)
+            const url = await Promise.resolve(`${API_URL}/${dirName}`)
 
             const fetchResponse = await fetch(url, {method: 'GET'})
             const data = await fetchResponse.json()
@@ -47,7 +45,7 @@ const Api = {
 
             const axiosResponse = await Axios({
                 method: "post",
-                url: `${API_URL_DEV}/upload`,
+                url: `${API_URL}/upload`,
                 data,   // FormData
                 config: { headers: { "Content-Type": "multipart/form-data" } }
             })
@@ -65,7 +63,7 @@ const Api = {
         try {
             const axiosParams = await Promise.resolve({
                 method: "post",
-                url: `${API_URL_DEV}/remove`,
+                url: `${API_URL}/remove`,
                 data: { source },   // FormData
                 //config: { headers: { "Content-Type": "application/json" } }
             })

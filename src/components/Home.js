@@ -471,11 +471,11 @@ class Home extends Component {
 
                             <Slide right>
                                 <Fade>
-                                    <div className="silTextAll" id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                                        <p style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
+                                    <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
+                                        <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
                                         <div style={{padding: '2em'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
-                                            <Carousel data={activeCategory ? sortedCarouselData : carouselData} removeSource={this.removeImageSource} />
+                                            <Carousel data={activeCategory ? sortedCarouselData : carouselData} removeSource={this.removeImageSource} admin={connected} />
                                         </div>  
                                         {
                                             activeCategory

@@ -129,9 +129,9 @@
   cursor: pointer
 }
 .shadow {
-  -webkit-box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
-  box-shadow: 11px 10px 29px -6px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
+  box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
 }
 .clickable {
   cursor: pointer;
@@ -157,9 +157,10 @@
 .gotuTextAll>* { 
   font-family: 'Gotu', sans-serif !important;
 }
-.silText {  
+.silText, .silTextAll>* {  
   font-family: 'Shadows Into Light', cursive !important;
 }
+
 .redText {
   color: "red";
 }

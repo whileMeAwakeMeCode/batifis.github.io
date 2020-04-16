@@ -99,7 +99,7 @@ class Intranet extends React.Component {
                         message: `${files.length} image${s} enregistrée${s}`,
                         icon: 'check',
                         iconColor: "green",
-                        maxStay: 3000,
+                        maxStay: 1500,
                         styleSheet: {textAlign: 'center'},
                         onClose: this.resetIntranet.bind(this) 
                     })
