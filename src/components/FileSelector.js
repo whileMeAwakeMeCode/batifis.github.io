@@ -82,12 +82,15 @@ const FileSelector = (props) => {
   const defaultFiles = {acceptedFiles: [], imageDatas: []};
   let [files, setFiles] = useState(defaultFiles);
 
-  const removeImage = async(src) => {
+  const removeImage = async(src, name) => {
     const imageDatas = await Promise.resolve(
       files.imageDatas.filter((idta) => idta.source !== src)
     )
     // todo : remove from acceptedFiles
-    setFiles({acceptedFiles: files.acceptedFiles, imageDatas})
+    const acceptedFiles = await Promise.resolve(
+      files.acceptedFiles.filter((af) => af.name !== name)
+    )
+    setFiles({acceptedFiles/*: files.acceptedFiles*/, imageDatas})
   }
 
   const sendImages = () => {
@@ -99,9 +102,9 @@ const FileSelector = (props) => {
   const resetFiles = () => setFiles(defaultFiles)
  
 
-  const renderImage = ({source}) => <BadgeImage
+  const renderImage = ({source, name}) => <BadgeImage
     source={source}
-    onBadgeClick={() => removeImage(source)}
+    onBadgeClick={() => removeImage(source, name)}
   />
   
   return(

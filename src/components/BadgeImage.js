@@ -2,6 +2,7 @@ import React from 'react'
 import Colors from '../constants/Colors'
 import { Icon, Image } from 'semantic-ui-react'
 
+
 /**
  * 
  * @param {object} props 

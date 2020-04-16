@@ -76,9 +76,12 @@ class Intranet extends React.Component {
 
             // indicate storage in progress
             await this.setState({uploadingFiles: true, incrementation: files.length * 10})
-               
+            
+            const catsString = await Promise.resolve(
+                this.state.categories.map((c) => c.key).join(', ')
+            )
             const imageDatas = await Promise.resolve(
-                _imageDatas.map((idta) => ({...idta, categories: this.state.categories}))
+                _imageDatas.map((idta) => ({...idta, categories: catsString}))  // was this.state.categories iso catsString
             )
             // store to S3 via API
             const upload = await Api.upload(files, imageDatas)

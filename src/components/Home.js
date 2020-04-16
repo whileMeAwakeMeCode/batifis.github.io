@@ -80,6 +80,8 @@ class Home extends Component {
         this.setState({carouselData})       
     }
 
+ 
+
 
     async componentDidMount() {
         
@@ -181,9 +183,24 @@ class Home extends Component {
     goToCategoriesMenu = () => this.scrollTo('metier')
     goToRealisations = () => this.scrollTo('realisations')
 
-    activateCategory = (activeCategory) => {
-        // Layout.isSmallDevice
-        // ? 
+    sortRealisationsByCategory = async(catKey) => {
+        const {carouselData} = this.state
+        //console.log('carouselData', carouselData.map((cd) => cd.categories.indexOf(catKey) >= 0))
+        let carouselDataSorting = await Promise.resolve(
+            carouselData.map((cd) => cd.categories.indexOf(catKey) >= 0)
+        )
+
+        let sortedCarouselData = await Promise.resolve(
+            carouselData.filter((cd, cdi) => carouselDataSorting[cdi])    
+        )
+        
+        this.setState({sortedCarouselData})
+    }
+
+    activateCategory = async(activeCategory) => {
+        
+        let sortedList = await this.sortRealisationsByCategory(activeCategory.key)
+        console.log('sortedList', sortedList)
         this.scrollTo('activeCategory')
         this.setState({activeCategory})
     }
@@ -270,7 +287,7 @@ class Home extends Component {
 
     render() {
         const {isSmallDevice} = Layout
-        const {loginProcessing, connected, activeCategory, loginError, displayIntranet} = this.state
+        const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData} = this.state
         const anthracite = "#818181"
         const catchMarginVertical = Layout.isSmallDevice ? 50 : 100;
         const CategorySelection = () => <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw'}} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>
@@ -458,7 +475,7 @@ class Home extends Component {
                                         <p style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
                                         <div style={{padding: '2em'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
-                                            <Carousel data={this.state.carouselData} removeSource={this.removeImageSource} />
+                                            <Carousel data={activeCategory ? sortedCarouselData : carouselData} removeSource={this.removeImageSource} />
                                         </div>  
                                         {
                                             activeCategory
