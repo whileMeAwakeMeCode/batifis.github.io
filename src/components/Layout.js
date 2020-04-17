@@ -22,6 +22,10 @@ const getLayout = () => ({
     logoWrapper: {backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: isTablet ? '45%' : (isSmallDevice ? '35%' : '25%'), position: 'absolute', overFlow: 'hidden'},
     logoPadding: isSmallDevice ? {paddingTop: 20} : {padding: 30},
     welcomeText: {fontSize: isSmallDevice ? 28 : 50, marginTop: landscape ? catchMarginVertical*1.5 : '50%', marginBottom: catchMarginVertical, width: '100%'},
+    footerFirstColClass: isSmallDevice ? 'nine' : 'seven',
+    footerSecondColClass: isSmallDevice ? 'seven' : 'nine',
+    footerPadding: isSmallDevice ? 15 : 0 
+  
     
 })
 

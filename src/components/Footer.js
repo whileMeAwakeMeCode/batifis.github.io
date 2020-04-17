@@ -6,7 +6,31 @@ import logo from '../images/transparentLogo.png'
 import LegalMentions from './LegalMentions'
 
 const AppLogo = (props) => <Image {...props} centered src={logo} size={props.size || "small"} />
+const ContactData = () => <div className="flexCenter spaceAround" style={{alignItems: 'flex-start'}}>
+<div>
+    <Icon name="map marker alternate" style={{color:Colors.white}} size="large" />
+    <p className="bold"> 
+        <li className="leftAlign">12 place de la 2ème db,
+            <br />
+            80200 Péronne
+        </li> 
+        <li className="leftAlign">3 ter rue de fresnoy,
+            <br />
+            80700 Roye
+        </li> 
+    </p>
+</div>
+<div>
+    <Icon name="phone" style={{color:Colors.white}} size="large" />
+    <p className="bold white"><a href="tel:+33611888053"> 06 11 88 80 53 </a></p>  
 
+    <Icon name="envelope" style={{color:Colors.white}} size="large" />
+    <p className="bold white"> <a href="mailto:contact@batifis.fr">contact@batifis.fr</a></p>   
+
+    <Icon name="id card outline" style={{color:Colors.white}} size="large" />
+    <p className="bold" style={{fontSize: 12}}> 85403991400015 </p>
+</div>
+</div>
 /**
  * ##PROPS
  *  - toggleLogger {function}(bound) : allow toggling Home login modal
@@ -30,17 +54,19 @@ class Footer extends Component {
         return true
     }
 
+    
+
     render() {
         const { isSmallDevice, isTablet } = Layout
 
         return(                     // txtOneFiveAll
-            <div className={`flexCenter`} >
+            <div className={`flexCenter`} style={{padding: Layout.footerPadding}}>
                 <div className="gotuTextAll">
 
-                    <div className="ui padded grid">
+                    <div className="ui grid">
 
                         {/* footer left menu */}
-                        <div className="ui seven wide column margedtop">
+                        <div className={`ui ${Layout.footerFirstColClass} wide column margedtop`}>
                             <div className="ui mid divider"></div>
                             <div><a href="mailto:contact@batifis.fr" className="clickable ui center aligned white header"><h4>Contact</h4></a></div>
 
@@ -67,48 +93,31 @@ class Footer extends Component {
 
 
                         {/* footer right column */}
-                        <div className="ui eight wide column" >
+                        <div className={`ui ${Layout.footerSecondColClass} wide column`} >
                             <AppLogo size="medium" className="shake-horizontal"/>
                             <Divider />
                             <div className="flexCenter spaceAround" style={isSmallDevice ? {flexDirection: "column", padding: '.1em'} : undefined}>
                                 <Image src={require("../images/ffb.png")} className="clickable" alt="fédération francaise du batiment" size="small" href="https://www.ffbatiment.fr/" target="_blank" rel="noopener noreferrer"/>                               
-                                <Image src="https://www.lemoniteur.fr/mediatheque/9/0/8/001402809.png" alt="site internet qualibat" className="clickable" style={isSmallDevice ? {} : {marginTop:"2%", padding:"3px", borderRadius:"7px", height:"75px", width:"75px", objectFit:"cover"}} href="https://www.qualibat.com/" target="_blank" rel="noopener noreferrer" />
-                               
+                                <div style={{padding: Layout.footerPadding}}>
+                                    <Image src="https://www.lemoniteur.fr/mediatheque/9/0/8/001402809.png" alt="site internet qualibat" className="clickable" style={isSmallDevice ? {} : {marginTop:"2%", padding:"3px", borderRadius:"7px", height:"75px", width:"75px", objectFit:"cover"}} href="https://www.qualibat.com/" target="_blank" rel="noopener noreferrer" />
+                                </div>
                             </div>
                             <Divider />
 
                             {/* contact */}
                             {
                                 (isSmallDevice || isTablet)
-                                ? ''
-                                : <div className="flexCenter spaceAround" style={{alignItems: 'flex-start'}}>
-                                    <div>
-                                        <Icon name="map marker alternate" style={{color:Colors.white}} size="large" />
-                                        <p className="bold"> 
-                                            <li className="leftAlign">12 place de la 2ème db,
-                                                <br />
-                                                80200 Péronne
-                                            </li> 
-                                            <li className="leftAlign">3 ter rue de fresnoy,
-                                                <br />
-                                                80700 Roye
-                                            </li> 
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <Icon name="phone" style={{color:Colors.white}} size="large" />
-                                        <p className="bold white"><a href="tel:+33611888053"> 06 11 88 80 53 </a></p>  
-
-                                        <Icon name="envelope" style={{color:Colors.white}} size="large" />
-                                        <p className="bold white"> <a href="mailto:contact@batifis.fr">contact@batifis.fr</a></p>   
-
-                                        <Icon name="id card outline" style={{color:Colors.white}} size="large" />
-                                        <p className="bold" style={{fontSize: 12}}> 85403991400015 </p>
-                                    </div>
-                                </div>
+                                ? null
+                                : <ContactData />
                             }
                             
                         </div>
+
+                        {
+                            (isSmallDevice || isTablet)
+                            ? <ContactData />
+                            : null
+                        }
 
                         <div className="ui sixteen wide column">
                             <div className='flexCenter spaceAround' style={{backgroundColor: Colors.batifisGrey, width: '100vw', padding: 20}}>

@@ -532,7 +532,7 @@ class Home extends Component {
                             
                             {/* footer */}
                             <div className="footerWrapper" style={{backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
-                                <Footer modalOpener={this.log.bind(this)} toggleLogger={this.intranetOrLogger}/>
+                                <Footer modalOpener={this.log.bind(this)} toggleLogger={this.intranetOrLogger} />
                             </div>
                         </div>
                     </div>
