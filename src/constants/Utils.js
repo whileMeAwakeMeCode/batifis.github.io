@@ -1,7 +1,7 @@
 
-const Utils = {
-    keyExtractor : () => Math.floor(Math.random() * (10000000000)),
-    isJSON : (supJSON) => {
+
+    module.exports.keyExtractor = () => Math.floor(Math.random() * (10000000000))
+    module.exports.isJSON = (supJSON) => {
         try {
             let json = JSON.parse(supJSON) 
             return json
@@ -9,8 +9,8 @@ const Utils = {
         } catch(err) {
             return(false)
         }
-    },
-    ofType : (any) => {
+    }
+    module.exports.ofType = (any) => {
         let t = typeof any
         return(
             t !== 'object'
@@ -21,12 +21,14 @@ const Utils = {
                 : t
             )
         )
-    },
-    percentOf: (part, total) => (100 / (total / part)),	// (4, 16) = 25
-    percentage: (percent, number) => (
+    }
+    module.exports.percentOf = (part, total) => (100 / (total / part))	// (4, 16) = 25
+    module.exports.percentage = (percent, number) => (
         (number / 100) * percent
-    ),
-    
-}
+    )
+    module.exports.apostrophe = ({expression, article}) => {
+        const vowels = 'aeiou'
+      return vowels.indexOf(expression.toLowerCase().charAt(0)) >= 1 ? `${`${article.charAt(0)}'`}${expression}` : `${article} ${expression}`
+    }
 
-export default Utils
+

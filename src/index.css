@@ -1,4 +1,16 @@
 
+@media only screen and (orientation:landscape){
+  body >*:not(.modal.active) {
+    height: 100vw;
+    opacity: .3;
+    filter: blur(5px);
+    /*
+    transform: rotate(90deg); */
+  }
+
+  
+}
+
 /* imports */
 @import url('https://fonts.googleapis.com/css?family=Gotu|Shadows+Into+Light&display=swap');
 
@@ -10,7 +22,10 @@
 @-webkit-keyframes slide-in-blurred-left{0%{-webkit-transform:translateX(-1000px) scaleX(2.5) scaleY(.2);transform:translateX(-1000px) scaleX(2.5) scaleY(.2);-webkit-transform-origin:100% 50%;transform-origin:100% 50%;-webkit-filter:blur(40px);filter:blur(40px);opacity:0}100%{-webkit-transform:translateX(0) scaleY(1) scaleX(1);transform:translateX(0) scaleY(1) scaleX(1);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-filter:blur(0);filter:blur(0);opacity:1}}@keyframes slide-in-blurred-left{0%{-webkit-transform:translateX(-1000px) scaleX(2.5) scaleY(.2);transform:translateX(-1000px) scaleX(2.5) scaleY(.2);-webkit-transform-origin:100% 50%;transform-origin:100% 50%;-webkit-filter:blur(40px);filter:blur(40px);opacity:0}100%{-webkit-transform:translateX(0) scaleY(1) scaleX(1);transform:translateX(0) scaleY(1) scaleX(1);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-filter:blur(0);filter:blur(0);opacity:1}}
 */
 
-
+.modal{
+  filter: blur(0px) !important;
+  opacity: 1 !important;
+}
 /* dimensions / spaces */
 .flexCenter {
   display: flex;
@@ -77,6 +92,7 @@
 .column {
   flex-direction: column;
 }
+
 .allWidth {
   width: 100%
 }
@@ -128,11 +144,24 @@
   font-weight: bold;
   cursor: pointer
 }
+
 .shadow {
   -webkit-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
   -moz-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
   box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
 }
+
+.bottomShadow {
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+	box-shadow: 0 8px 6px -6px black;
+}
+
+/* .shadow {
+    -webkit-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
+    box-shadow: 11px 10px 15px -6px rgba(0,0,0,0.75);
+} */
 .clickable {
   cursor: pointer;
 }

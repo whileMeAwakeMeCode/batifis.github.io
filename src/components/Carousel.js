@@ -73,7 +73,7 @@ class Carousel extends Component {
         return(
             hasReachedData
             ? (hasData
-                ? <div>
+                ? <div style={{height: '100%'}}>
                     <Slider {...{...settings, dots: this.props.data.length <= 10}}>  {/* maximum 10 dots */}
                         {
                             this.props.data.map(this.renderItem)

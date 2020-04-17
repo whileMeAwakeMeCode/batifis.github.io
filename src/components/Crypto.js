@@ -1,5 +1,5 @@
 import cryptoJSON from 'crypto-json'
-import Utils from '../constants/Utils'
+import { isJSON } from '../constants/Utils'
 const JSON_algorithm = 'camellia-128-cbc'    
 const encoding = 'hex'
 const JSON_encrypt_pwd = "sdf45$TG34F9_34xD€24f9/j94FJZXg349J02x"
@@ -20,7 +20,7 @@ const noJSONStrings = (obj) => {
                keys.map(async (key, i) => {
 
                    // check if obj[key] value has a JSON type 
-                   var hasJSONValue = await new Promise((res) => {res(Utils.isJSON(obj[key]))});
+                   var hasJSONValue = await new Promise((res) => {res(isJSON(obj[key]))});
                    
 
                    newObj[key] = await new Promise((res) => {

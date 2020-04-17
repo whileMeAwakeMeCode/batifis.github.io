@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {Progress} from 'semantic-ui-react'
-import Utils from '../constants/Utils'
+import { keyExtractor } from '../constants/Utils'
 
 /**
  * @dev #PROPS:
@@ -57,7 +57,7 @@ class AutoProgressBar extends React.Component {
             ? null
             : <Progress
                 active={active}
-                key={Utils.keyExtractor()}
+                key={keyExtractor()}
                 indicating={!color}
                 percent={completed ? 100 : progress}
                 color={color}

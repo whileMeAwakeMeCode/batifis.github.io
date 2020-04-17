@@ -22,7 +22,8 @@ const Dropzone = ({setFiles: _setFiles}) => {
         var fr = new FileReader();
 
         fr.onload = async() => {
-          img.src = await Promise.resolve(fr.result)
+          //img.src = await Promise.resolve(fr.result)
+          img.src= fr.result
 
           // wait for img to be read
           setTimeout(async() => {
@@ -37,7 +38,7 @@ const Dropzone = ({setFiles: _setFiles}) => {
   
             //_fileSource(fr.result);
             _imageDatas(imageDatas)
-          })
+          }, 100)
         }
 
         fr.readAsDataURL(af);
@@ -49,13 +50,14 @@ const Dropzone = ({setFiles: _setFiles}) => {
 
     // Do something with the files
     setFiles({acceptedFiles, imageDatas})
+    window.scrollTo(0, document.querySelector('#drop_zone').offsetTop)
       
   }, [_setFiles])
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   return (
-    <div {...getRootProps()}>
+    <div id="drop_zone" {...getRootProps()}>
       <input {...getInputProps()} />
       {
         isDragActive 

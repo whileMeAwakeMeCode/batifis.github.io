@@ -138,7 +138,8 @@ class Intranet extends React.Component {
             stay: true,
             closeButton: true,
             closeText: "Ok",
-            styleSheet: {textAlign: 'center'}
+            styleSheet: {textAlign: 'center'},
+            onClose: () => window.scrollTo(0, 0)
 
         });
        

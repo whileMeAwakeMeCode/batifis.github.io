@@ -1,7 +1,7 @@
 /* Packages */
 import React, {Component} from 'react'
 import { Parallax } from 'react-parallax'
-import {Image, Modal, Form, Button, Icon} from 'semantic-ui-react'
+import {Image, Modal, Form, Button, Icon, Dimmer} from 'semantic-ui-react'
 // effects
 import Fade from 'react-reveal/Fade';
 import Slide from 'react-reveal/Slide';   
@@ -14,10 +14,10 @@ import Carousel from './Carousel'
 import Intranet from './Intranet'
 
 /* Constants */
-import Layout from './Layout'
+import layout from './Layout'
 import Api from '../constants/Api'
-import { protectImages } from '../constants/ImageProtector'
-
+import { protectImages, listenOrientation } from '../constants/StartUpEvents'
+import { apostrophe } from '../constants/Utils'
 /* Images */
 import logo from '../images/logo.png';
 import transparentLogo from '../images/transparentLogo.png';
@@ -27,7 +27,11 @@ import CustomIcon from './CustomIcon';
 import Crypto from './Crypto';
 import Styles from '../constants/Styles';
 
+const Layout = layout.getLayout()
+
 class Home extends Component {
+    getOrientation = () => window.screen.orientation.type.split('-')[0]
+
     state = {
         loggerOpened: false,
         loginProcessing: false,
@@ -68,32 +72,67 @@ class Home extends Component {
             title: "Enduit",
             key: 'enduit',
         }
-    ]
+    ];
 
 
     categoriesOptions = this.categories.map(
         ({key, title}) => ({key: key, text: title, value: {key, title}})
-    )
+    );
 
     reachRealisations = async() => {
         // get all realisations
         const carouselData = await Api.get('photos')
-        this.setState({carouselData})       
+        this.setState({carouselData})  
     }
 
- 
+    
 
+    orientationListener = () => {
+       
+        const {availWidth, availHeight} = window.screen
+        
+        //this.setState({forbiddenOrientation: orientation === 'landscape'})
+        if (availWidth >= availHeight) {
+            this.setState({forbiddenOrientation: true})
+        }
+        else if (this.state.forbiddenOrientation) 
+            this.setState({forbiddenOrientation: false})
+        
+            console.log('orientation', availWidth >= availHeight ? 'landscape' : 'portrait')
+       
+    }
 
     async componentDidMount() {
         
+        // fetch realisations
         this.reachRealisations()
         
-        protectImages()
-
+        // protect all images from stealing
+        protectImages();
+ 
+        // listen to mobile device orientation change
+        const isMobile = await listenOrientation(this.orientationListener)        
+        console.log('isMobile', isMobile)  
         
+        // check if current orientation is allowed
+        if (Layout.landscape && isMobile) {
+            console.log('*LANDSCAPE TRIGGERED ON MOUNT*')
+
+            // TODO : change Layout : TODO
+
+            this.setState({forbiddenOrientation: true})
+        }
+
         // RAT :
         // const MehmetHash = await Crypto.encrypt(`batifice@laposte.net::Batifis@2020$`, true)
         // console.log(' ===> MehmetHash', MehmetHash)
+    }
+
+   
+
+    componentWillUnmount() {
+        // remove orientation change event handler on mobile
+        typeof window.orientationChangeEventRemover === 'function' && window.orientationChangeEventRemover()
     }
 
 
@@ -232,7 +271,7 @@ class Home extends Component {
         const colCats = _categories.splice(topIndex, Layout.isSmallDevice ? catLength : colChangeIndex)
         
         return (
-            <div key={`cat_${colIndex}`} className="flexCenter spaceAround" style={{flexDirection: "column", flex: 1}}>
+            <div key={`cat_${colIndex}`} className="flexCenter spaceAround" style={Styles.flexColumn}>
                 <Fade>
                 {
                     colCats.map((cat, catIndex) => <div 
@@ -241,8 +280,8 @@ class Home extends Component {
                             onClick={() => this.activateCategory(cat)}
                         >
                             {<CustomIcon name={cat.key} size={cat.iconSize || 40} />}
-                            <ul className="catTitleList" style={{width: Layout.isSmallDevice ? '80vw' : '20vw'}}>
-                                <li className="noDot silText noWrap" style={{fontSize: Layout.bigTitleText, marginLeft: Layout.isSmallDevice ? '10vw' : '5vw'}}>
+                            <ul className="catTitleList" style={{width: Layout.catTitleList}}>
+                                <li className="noDot silText noWrap" style={{fontSize: Layout.bigTitleText, marginLeft: Layout.catTitleMargin}}>
                                     {cat.title}
                                 </li>
                             </ul>
@@ -292,18 +331,17 @@ class Home extends Component {
 
     render() {
         const {isSmallDevice} = Layout
-        const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData} = this.state
-        const anthracite = "#818181"
-        const catchMarginVertical = Layout.isSmallDevice ? 50 : 100;
-        const CategorySelection = () => <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw'}} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>
+        const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData, forbiddenOrientation} = this.state
+        const CategorySelection = () => <Button className="appButtonBlue" style={Styles.largeAppBlueButton} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>;
         return(
             <div>
+                <Modal dimmer='blurring' size='mini' open={forbiddenOrientation} style={{textAlign: 'center'}} ><Modal.Header><Icon name="warning" />Oups</Modal.Header><Modal.Content>Veuillez revenir en mode portrait</Modal.Content></Modal>
                 {this.maybeLogMsg()}
                 {
                     displayIntranet
                     ? <Intranet log={this.log.bind(this)} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
                     : <div style={{zIndex: 1}}>
-                        <div key="metas" style={{height: 0, color: 'transparent', zIndex: -1}}>
+                        <div key="metas" style={Styles.invisible}>
                             <p className="unselectable tt">
                                 Bonjour et bienvenue sur le site internet de l’entreprise Batifis, entreprise de maçonnerie, rénovations de l’habitat situé en Picardie à Péronne (80200) et à Roye(80700) - entreprise de maçonnerie Roye - entreprise de maconnerie roye - entreprise de maçonnerie Ham - entreprise de maconnerie ham - entreprise de maçonnerie Chaulnes - entreprise de maconnerie chaulnes - entreprise de maçonnerie Rosières en santerre - entreprise de maconnerie rosières en santerre - entreprise de maçonnerie Noyon - entreprise de maconnerie noyon - entreprise de maçonnerie montdidier - entreprise de maconnerie montdidier - entreprise de maçonnerie moreuil - entreprise de maconnerie moreuil - entreprise de maçonnerie ressons sur Matz - entreprise de maconnerie ressons sur matz - entreprise de maçonnerie Nesle - entreprise de maconnerie nesle - entreprise de maçonnerie Boves - entreprise de maconnerie nesle - entreprise de maçonnerie Amiens - entreprise de maconnerie amiens - entreprise de maçonnerie Compiègne - entreprise de maconnerie compiègne - entreprise de maçonnerie ailly sur noye - entreprise de maconnerie ailly sur noye - entreprise de maçonnerie 80340 Bray sur somme - entreprise de maconnerie Bray sur somme 80340 - Rénovation Roye- Renovation Ham - Renovation Chaulnes - Renovation Rosieres en Santerre - Renovation Noyon - Renovation Montdidier - Renovation Moreuil - Renovation Ressons sur Matz - Renovation 80340 Bray sur somme - Renovation Nesle - Renovation Boves - Renovation Amiens - Renovation Plessier Rozainvillers - Renovation Ailly sur Noye - Pose de carrelage Roye - Pose de carrelage Ham - Pose de carrelage Chaulnes - Pose de carrelage Rosieres en Santerre - Pose de carrelage Noyon - Pose de carrelage Montdidier - Pose de carrelage Moreuil - Pose de carrelage Ressons sur Matz - Pose de carrelage 80340 Bray sur somme -  Pose de carrelage Nesle - Pose de carrelage Boves - Pose de carrelage Amiens - pose de carrelage Plessiers Rozainvillers - Pose de carrelage Ailly sur Noye - Maçonnerie Roye - maconnerie roye - Maçonnerie Ham - maconnerie ham - Maçonnerie Chaulnes - maconnerie chaulnes - Maçonnerie Rosières en Santerre - maconnerie rosières en santerre - Maçonnerie 80340 Bray sur somme - maconnerie Bray sur somme 80340 - Maçonnerie Noyon - maconnerie noyon - Maçonnerie Montdidier - maconnerie montdidier - Maçonnerie Moreuil - maconnerie moreuil - Maçonnerie Ressons sur Matz - maconnerie ressons sur matz - Maçonnerie Nesle - maconnerie boves - Maçonnerie Boves - Maçonnerie Amiens - maconnerie amiens - Maçonnerie Plessier Rozainvillers - maconnerie plessier rozainvillers - Maçonnerie Ailly sur Noye - maconnerie ailly sur noye - isolation Roye - isolation Ham - Isolation Chaulnes - Isolation Rosières en santerre - Isolation Noyon - Isolation Montdidier - Isolation Moreuil - Isolation Ressons sur Matz- Isolation Nesle - Isolation Boves - Isolation Amiens - Isolation Plessier Rozainvillers - Isolation 80340 Bray sur somme - Isolation Ailly sur Noye - Maçon Roye - Maçon Ham - Maçon Chaulnes - Maçon Rosieres en santerre - Maçon Noyon - Maçon Montdidier - Maçon Moreuil - Maçon Ressons sur Matz - Maçon Nesle - Maçon Nesle - Maçon Boves - Maçon Amiens - Maçon 80340 Bray sur somme - Maçon Plessier Rozainvillers - Maçon Ailly sur Noye - cloture Roye - cloture Ham - cloture Chaulnes - cloture Rosieres en santerre - cloture Noyon - cloture Montdidier - cloture Moreuil - cloture Ressons sur Matz - cloture Nesle - cloture Boves - cloture Amiens - cloture 80340 Bray sur somme - cloture Plessier Rozainvillers - cloture Ailly sur Noye - pose de cloture Roye - pose de cloture Ham - pose de cloture Chaulnes - pose de cloture Rosières en santerre - pose de cloture Noyon - pose de cloture Montdidier - pose de cloture Moreuil - pose de cloture 80340 Bray sur somme - pose de cloture Ressons sur Matz - pose de cloture Nesle - pose de cloture Boves - pose de cloture Amiens - pose de cloture Plessier Rozainvillers - pose de cloture Ailly sur Noye
                             </p>
@@ -314,18 +352,18 @@ class Home extends Component {
                             size={isSmallDevice ? "large" : "small"}
                         >
                             
-                            <div style={{padding: '1em'}}>
+                            <div style={Styles.oneEmPadding}>
                                 <ListItem
                                     spaceEvenly
                                     notAccepted
                                     title={<p className="silText">LOGIN</p>}
-                                    titleStyle={{fontSize:30}}
+                                    titleStyle={Styles.fontSize(30)}
                                     subTitle={<p className="gotuText">connectez-vous à votre compte Batifis</p>}
-                                    subTitleStyle={{fontSize: 15, color: "beige"}}
+                                    subTitleStyle={Styles.beige15}
                                     leftElement={<Image src={transparentLogo} size="small" />}
                                     alignRight="center"
-                                    containerStyle={{backgroundColor: anthracite, padding: 10, color: "#fff"}}
-                                    contentStyle={{color: "#fff"}}
+                                    containerStyle={Styles.anthraciteSegment}
+                                    contentStyle={Styles.whiteText}
                                 />
                                 {
                                     loginProcessing || loginError
@@ -337,11 +375,11 @@ class Home extends Component {
                                     />
                                     : null
                                 }
-                                <Form style={{height: '50vh', marginTop: 30, textAlign: 'center'}}>
+                                <Form style={Styles.loginFormWrapper}>
                                         <Form.Input
                                             fluid
                                             id='email_field'
-                                            label={<p style={{fontSize: 18}}>Email</p>}
+                                            label={<p style={Styles.fontSize(18)}>Email</p>}
                                             placeholder='entrez votre adresse email'
                                             type="email"
                                             className="silText"
@@ -351,18 +389,18 @@ class Home extends Component {
                                         <Form.Input
                                             fluid
                                             id='pwd_field'
-                                            label={<p style={{fontSize: 18}}>Mot de passe</p>}
+                                            label={<p style={Styles.fontSize(18)}>Mot de passe</p>}
                                             placeholder='entrez votre mot de passe'
                                             type='password'
                                             className="silText"
-                                            labelStyle={{fontSize: 19}}
+                                            labelStyle={Styles.fontSize(19)}
                                             onChange={this.setHash}
 
                                         />
 
                                     <div className="flexCenter">
                                         <Button onClick={this.login}>
-                                            <p className="silText" style={{fontSize: Layout.buttonText}}>Connexion</p>
+                                            <p className="silText" style={Styles.fontSize(Layout.buttonText)}>Connexion</p>
                                         </Button>
                                     </div>
                                     
@@ -375,16 +413,16 @@ class Home extends Component {
                             blur={0}
                             bgImage={require('../photo0.jpg')}
                             bgImageAlt="batifis"
-                            bgImageStyle={{height: '50vh', width: '100vw', objectFit: 'cover', opacity: .8}}
-                            strength={isSmallDevice ? 100 : 300}
+                            bgImageStyle={Styles.parallaxBg}
+                            strength={Layout.parallaxStrength}
                         >
                             <div style={{height: '50vh'}}>
-                                <div className="flexRow flexStart" style={{height: 30}}>
-                                    <div className="flexStart spaceAround noWrap" style={{flex: isSmallDevice ? .3 : .2, fontSize: 17, color: "#0d11db"}}>    
+                                <div className="flexRow flexStart" style={Styles.height30}>
+                                    <div className="flexStart spaceAround noWrap" style={Layout.parallaxRow}>    
 
                                         <div 
                                             className="boldOnHover silText clickable"
-                                            style={{color: Colors.white}}
+                                            style={Styles.whiteText}
                                             //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                             onClick={this.intranetOrLogger}
                                         >
@@ -404,12 +442,12 @@ class Home extends Component {
                                 </div>
                             </div>
                         </Parallax>
-                        <div style={{height: '50vh', display: 'flex', justifyContent: 'center'}}>
-                            <div style={{backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: '25%', position: 'absolute'}}>
-                                <Image circular centered size="medium" src={logo} style={Layout.isSmallDevice ? {paddingTop: 20} : {padding: 30}} />
+                        <div style={Styles.logoSegmentWrapper}>
+                            <div style={Layout.logoWrapper}>
+                                <Image circular centered size="medium" src={logo} style={Layout.logoPadding} />
                             </div>
-                            <div style={{flexDirection: 'column', height: '100vh'}}>
-                                <p className="silText" style={{fontSize: Layout.isSmallDevice ? 28 : 50, marginTop: catchMarginVertical, marginBottom: catchMarginVertical * 1.5, width: '100%'}}>Au service de votre batiment</p>
+                            <div style={Styles.fullHeightColumn}>
+                                <p className="silText" style={Layout.welcomeText}>Au service de votre batiment</p>
                                 <div className="flexCenter" style={{width: '100%'}}>
                                     <Fade>
                                         <div style={{height: '100vh', width: '100vw'}}>
@@ -465,8 +503,8 @@ class Home extends Component {
                                             </div>
                                             <div style={{flex: .8}}></div>
                                             <div style={{flex: .1}}>
+                                                <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', marginTop: 5, marginBottom: '1%'}} onClick={this.goToRealisations}>Voir toutes nos réalisations dans la catégorie {activeCategory.title}</Button>
                                                 <CategorySelection />
-                                                <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', marginTop: 5, marginBottom: '1%'}} onClick={this.goToRealisations}>Voir toutes les réalisations dans la catégorie {activeCategory.title}</Button>
                                             </div>
                                         </Slide>
                                     </div>
@@ -477,17 +515,27 @@ class Home extends Component {
                             <Slide right>
                                 <Fade>
                                     <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                                        <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? `de ${activeCategory.title}` : ""}</p>
+                                        <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? apostrophe({expression: activeCategory.title, article: "de"}) : ""}</p>
                                         <div style={{padding: '2em'}}>
                                             {/* gallery MUST have 2 modes : activeCategory(state) || all */}
-                                            <Carousel data={activeCategory ? sortedCarouselData : carouselData} removeSource={this.removeImageSource} admin={connected} />
+                                            <Carousel 
+                                                data={activeCategory ? sortedCarouselData : carouselData} 
+                                                removeSource={this.removeImageSource} 
+                                                admin={connected} />
                                         </div>  
                                         {
                                             activeCategory
                                             ? <div>
                                                 <CategorySelection />
                                             </div>
-                                            : <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', alignSelf: 'center', marginBottom: 5}} onClick={this.goToCategoriesMenu}>Sélectionner une {activeCategory ? "autre" : ""} catégorie</Button>
+                                            : <Button 
+                                                className="appButtonBlue" 
+                                                style={{...Styles.appButtonBlue, width: '90vw', alignSelf: 'center', 
+                                                marginBottom: 5}} 
+                                                onClick={this.goToCategoriesMenu}
+                                                >
+                                                    Sélectionner une {activeCategory ? "autre" : ""} catégorie
+                                                </Button>
 
                                         }  
                                     </div>
@@ -496,10 +544,6 @@ class Home extends Component {
 
                             
                             {/* footer */}
-                            {/* <div style={{height: '20vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
-                                <Image left size="small" src={transparentLogo} style={{backgroundColor: 'transparent', ...Layout.isSmallDevice ? {paddingTop: 20} : {padding: 30}}} />
-
-                            </div> */}
                             <div className="footerWrapper" style={{backgroundColor: Colors.anthracite, color: Colors.white, border: 'solid', borderWidth: 0, borderTopWidth: 1, borderColor: Colors.red}}>
                                 <Footer modalOpener={this.log.bind(this)} toggleLogger={this.intranetOrLogger}/>
                             </div>

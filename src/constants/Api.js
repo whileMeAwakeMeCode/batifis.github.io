@@ -65,7 +65,6 @@ const Api = {
                 method: "post",
                 url: `${API_URL}/remove`,
                 data: { source },   // FormData
-                //config: { headers: { "Content-Type": "application/json" } }
             })
 
             const axiosResponse = await Axios(axiosParams)

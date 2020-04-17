@@ -77,7 +77,9 @@ export default class Log extends Component {
     }
 
     componentWillUnmount() {
+        const {onClose} = this.props
         clearTimeout(this.timer);
+        typeof onClose === 'function' && onClose()
     }
 
     componentDidUpdate() {                          /* Define component update action */
@@ -87,7 +89,7 @@ export default class Log extends Component {
             this.setState({closed:false})
         else if(endMsg && message) {                  // if endMsg request, close modal by passing an empty logConfig to App 
             logMethod({});
-            typeof onClose === 'function' && onClose();
+            //typeof onClose === 'function' && onClose();
         }
     }
 
@@ -165,7 +167,7 @@ export default class Log extends Component {
     render() { 
         const {title, size, styleSheet, closed, classAttribute, id, titleStyle} = this.props
         return(
-            <Modal id={id} open={!closed && !this.state.closed} style={{...styleSheet}} size={size} className={classAttribute.concat(' tekotxtall')} >
+            <Modal id={id} open={!closed && !this.state.closed} style={{...styleSheet}} size={size} className={classAttribute.concat(' gotuTextAll')} >
                 <Modal.Header>
                     {this.maybeShowIcon()}
                     <span style={titleStyle}>{title}</span>
