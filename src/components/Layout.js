@@ -1,15 +1,17 @@
 
 
 const isSmallDevice = window.innerWidth < 500;
+const isTablet = (window.innerWidth <= 800) && (window.innerWidth >= 500)
 const catchMarginVertical = isSmallDevice ? 50 : 100
+const landscape = window.innerHeight < window.innerWidth
 
 const getLayout = () => ({
     height: window.innerHeight,
     width: window.innerWidth,
     isSmallDevice,
-    isTablet: (window.innerWidth <= 800) && (window.innerWidth >= 500),
+    isTablet,
     portrait: window.innerWidth < window.innerHeight,
-    landscape: window.innerHeight < window.innerWidth,
+    landscape,
     titleText: isSmallDevice ? 15 : 25,
     bigTitleText: isSmallDevice ? 23 : 30,
     buttonText: isSmallDevice ? 14 : 17,
@@ -17,9 +19,9 @@ const getLayout = () => ({
     catTitleMargin: isSmallDevice ? '10vw' : '5vw',
     parallaxStrength: isSmallDevice ? 100 : 300,
     parallaxRow: {flex: isSmallDevice ? .3 : .2, fontSize: 17, color: "#0d11db"},
-    logoWrapper: {backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: '25%', position: 'absolute', overFlow: 'hidden'},
+    logoWrapper: {backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: isTablet ? '45%' : (isSmallDevice ? '35%' : '25%'), position: 'absolute', overFlow: 'hidden'},
     logoPadding: isSmallDevice ? {paddingTop: 20} : {padding: 30},
-    welcomeText: {fontSize: isSmallDevice ? 28 : 50, marginTop: catchMarginVertical, marginBottom: catchMarginVertical * 1.5, width: '100%'},
+    welcomeText: {fontSize: isSmallDevice ? 28 : 50, marginTop: landscape ? catchMarginVertical*1.5 : '50%', marginBottom: catchMarginVertical, width: '100%'},
     
 })
 

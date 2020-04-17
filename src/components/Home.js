@@ -448,18 +448,6 @@ class Home extends Component {
                             </div>
                             <div style={Styles.fullHeightColumn}>
                                 <p className="silText" style={Layout.welcomeText}>Au service de votre batiment</p>
-                                <div className="flexCenter" style={{width: '100%'}}>
-                                    <Fade>
-                                        <div style={{height: '100vh', width: '100vw'}}>
-                                            <p className="silText" style={{fontSize: Layout.titleText}}>retrouvez toutes les informations sur Batifis ici bientôt !</p>
-                                            {/* <Grid centered>
-                                                <Grid.Column style={{ textAlign: 'center'}}>1</Grid.Column>
-                                                <Grid.Column>2</Grid.Column>
-                                            </Grid> */}
-                                        </div>
-                                    </Fade>
-                                    
-                                </div>
                             </div>
                         
                         </div>

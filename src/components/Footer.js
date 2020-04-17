@@ -5,7 +5,7 @@ import Layout from './Layout'
 import logo from '../images/transparentLogo.png'
 import LegalMentions from './LegalMentions'
 
-const AppLogo = (props) => <Image {...props} centered src={logo} size="small" />
+const AppLogo = (props) => <Image {...props} centered src={logo} size={props.size || "small"} />
 
 /**
  * ##PROPS
@@ -42,6 +42,9 @@ class Footer extends Component {
                         {/* footer left menu */}
                         <div className="ui seven wide column margedtop">
                             <div className="ui mid divider"></div>
+                            <div><a href="mailto:contact@batifis.fr" className="clickable ui center aligned white header"><h4>Contact</h4></a></div>
+
+                            <div className="ui mid divider"></div>
                             <div><a href="#metier" className="clickable ui center aligned white header"><h4>Métier</h4></a></div>
 
                             
@@ -65,7 +68,7 @@ class Footer extends Component {
 
                         {/* footer right column */}
                         <div className="ui eight wide column" >
-                            <AppLogo size="small" className="shake-horizontal"/>
+                            <AppLogo size="medium" className="shake-horizontal"/>
                             <Divider />
                             <div className="flexCenter spaceAround" style={isSmallDevice ? {flexDirection: "column", padding: '.1em'} : undefined}>
                                 <Image src={require("../images/ffb.png")} className="clickable" alt="fédération francaise du batiment" size="small" href="https://www.ffbatiment.fr/" target="_blank" rel="noopener noreferrer"/>                               
@@ -94,7 +97,11 @@ class Footer extends Component {
                                     </div>
                                     <div>
                                         <Icon name="phone" style={{color:Colors.white}} size="large" />
-                                        <p className="bold"> 06 11 88 80 53 </p>   
+                                        <p className="bold white"><a href="tel:+33611888053"> 06 11 88 80 53 </a></p>  
+
+                                        <Icon name="envelope" style={{color:Colors.white}} size="large" />
+                                        <p className="bold white"> <a href="mailto:contact@batifis.fr">contact@batifis.fr</a></p>   
+
                                         <Icon name="id card outline" style={{color:Colors.white}} size="large" />
                                         <p className="bold" style={{fontSize: 12}}> 85403991400015 </p>
                                     </div>
@@ -106,8 +113,8 @@ class Footer extends Component {
                         <div className="ui sixteen wide column">
                             <div className='flexCenter spaceAround' style={{backgroundColor: Colors.batifisGrey, width: '100vw', padding: 20}}>
                                 <Image src={require("../images/local_business.png")} alt="entreprise 80700 roye" size="small"/>
-                                <Image src="https://workandup-dev.s3.eu-west-3.amazonaws.com/IMAGES/villederoye.png" alt="ville de roye" size="tiny" href="https://roye.eu" target="_blank" rel="noopener noreferrer" />       
-                                <Image src="http://cdn1_2.reseaudesvilles.fr/cities/336/logo/VMeRi2FUcIpizBx.png" alt="ville de péronne" size="small" href="https://ville-peronne.fr" target="_blank" rel="noopener noreferrer" />       
+                                <Image src={require('../images/villederoye.png')} alt="ville de roye" size="tiny" href="https://roye.eu" target="_blank" rel="noopener noreferrer" />       
+                                <Image src={require('../images/villedeperonne.png')} alt="ville de péronne" size="tiny" href="https://ville-peronne.fr" target="_blank" rel="noopener noreferrer" />       
                             </div>  {/* http://cdn1_2.reseaudesvilles.fr/cities/336/logo/VMeRi2FUcIpizBx.png*/}
                         </div>
                     
