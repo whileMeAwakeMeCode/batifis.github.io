@@ -332,6 +332,7 @@ class Home extends Component {
         const {isSmallDevice} = Layout
         const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData, forbiddenOrientation} = this.state
         const CategorySelection = () => <Button className="appButtonBlue" style={Styles.largeAppBlueButton} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>;
+        activeCategory && console.log('apostrophe({expression: activeCategory.title, article: "de"})', apostrophe({expression: activeCategory.title, article: "de"}));
         return(
             <div>
                 <Modal dimmer='blurring' size='mini' open={forbiddenOrientation} style={{textAlign: 'center'}} ><Modal.Header><Icon name="warning" />Oups</Modal.Header><Modal.Content>Veuillez revenir en mode portrait</Modal.Content></Modal>

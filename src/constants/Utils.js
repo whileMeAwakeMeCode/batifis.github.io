@@ -27,6 +27,7 @@
         (number / 100) * percent
     )
     export const apostrophe = ({expression, article}) => {
+        expression = expression.toLowerCase()
         const vowels = 'aeiou'
       return vowels.indexOf(expression.charAt(0)) >= 1 ? `${`${article.charAt(0)}'`}${expression}` : `${article} ${expression}`
     }
