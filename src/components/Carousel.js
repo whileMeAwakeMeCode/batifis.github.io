@@ -38,14 +38,15 @@ class Carousel extends Component {
 
 
     renderItem = (img) => {
-        
-        const badgeWrapWidth = getImageAutoWidth({
+        let key = Utils.keyExtractor()
+        let badgeWrapWidth = getImageAutoWidth({
             width: img.width,
             height: img.height,
             maxHeight: Layout.height * .7,   // 70vh
             maxWidth: Math.round(Layout.width * .7)
         })
         return this.props.admin === true ? <BadgeImage
+            key={key}
             shadow={false}
             className="shadow"
             source={img.source}
@@ -58,7 +59,7 @@ class Carousel extends Component {
                 zIndex: 2
             }}
         />
-        : <div>
+        : <div key={key}>
             <Image centered className="shadow" src={img.source} style={{height: '70vh', width: 'auto', maxWidth: '70vw', objectFit: 'contain', borderRadius: 5}} />
             <div style={{height: 20}} />
         </div>

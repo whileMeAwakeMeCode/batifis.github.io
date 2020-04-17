@@ -17,7 +17,7 @@ const getLayout = () => ({
     catTitleMargin: isSmallDevice ? '10vw' : '5vw',
     parallaxStrength: isSmallDevice ? 100 : 300,
     parallaxRow: {flex: isSmallDevice ? .3 : .2, fontSize: 17, color: "#0d11db"},
-    logoWrapper: {backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: '25%', position: 'absolute'},
+    logoWrapper: {backgroundColor: "#fff", opacity: 1, borderTopLeftRadius: 200, borderTopRightRadius: 200, marginTop: isSmallDevice ? -50 : -130, width: '25%', position: 'absolute', overFlow: 'hidden'},
     logoPadding: isSmallDevice ? {paddingTop: 20} : {padding: 30},
     welcomeText: {fontSize: isSmallDevice ? 28 : 50, marginTop: catchMarginVertical, marginBottom: catchMarginVertical * 1.5, width: '100%'},
     

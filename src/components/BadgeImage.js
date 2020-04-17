@@ -6,6 +6,7 @@ import { Icon, Image } from 'semantic-ui-react'
 /**
  * 
  * @param {object} props 
+ *  - key {number}
  *  - source {string} : image source
  *  - className {string} : image inline class
  *  - badgeName {enum} : a semantic-ui-react valid icon name (default: 'close')
@@ -20,11 +21,12 @@ import { Icon, Image } from 'semantic-ui-react'
  *  - bacdgeMarginTop
  */
 const BadgeImage = (props) => {
-    const {source, badgeName, imageSize, imageStyle, onBadgeClick, resizeMode, containerStyle, className, shadow, badgeContainerStyle, badgeMarginTop, badgeMarginRight} = props
+    const {key, source, badgeName, imageSize, imageStyle, onBadgeClick, resizeMode, containerStyle, className, shadow, badgeContainerStyle, badgeMarginTop, badgeMarginRight} = props
 
     const badgeClick = () => typeof onBadgeClick === 'function' && onBadgeClick()
 
     return <div 
+        key={key}
         className={shadow === false ? "" : "shadow"}
         style={containerStyle || {padding: 10, margin: 20, border: `solid 1px ${Colors.anthracite}`, borderRadius: 10, backgroundColor: Colors.white}}
     >

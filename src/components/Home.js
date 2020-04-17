@@ -103,7 +103,7 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        
+        const {availWidth, availHeight} = window.screen
         // fetch realisations
         this.reachRealisations()
         
@@ -115,7 +115,7 @@ class Home extends Component {
         console.log('isMobile', isMobile)  
         
         // check if current orientation is allowed
-        if (Layout.landscape && isMobile) {
+        if (availWidth > availHeight && isMobile) {
             console.log('*LANDSCAPE TRIGGERED ON MOUNT*')
 
             // TODO : change Layout : TODO
@@ -444,7 +444,7 @@ class Home extends Component {
                         </Parallax>
                         <div style={Styles.logoSegmentWrapper}>
                             <div style={Layout.logoWrapper}>
-                                <Image circular centered size="medium" src={logo} style={Layout.logoPadding} />
+                                <Image circular centered size="large" src={transparentLogo/*was logo*/} style={Layout.logoPadding} />
                             </div>
                             <div style={Styles.fullHeightColumn}>
                                 <p className="silText" style={Layout.welcomeText}>Au service de votre batiment</p>

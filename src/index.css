@@ -1,15 +1,15 @@
 
-@media only screen and (orientation:landscape){
+/* @media only screen and (orientation:landscape){
   body >*:not(.modal.active) {
     height: 100vw;
     opacity: .3;
     filter: blur(5px);
-    /*
-    transform: rotate(90deg); */
+    
+    transform: rotate(90deg); 
   }
 
   
-}
+} */
 
 /* imports */
 @import url('https://fonts.googleapis.com/css?family=Gotu|Shadows+Into+Light&display=swap');
