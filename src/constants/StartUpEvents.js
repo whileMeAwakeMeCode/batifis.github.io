@@ -33,7 +33,7 @@ const listenOrientation = async(orientationChangeHandler) => {
       
 }
 
-module.exports = {
+export default {
     listenOrientation,
     protectImages
 }
