@@ -1,4 +1,4 @@
-module.exports.protectImages = () => {
+const protectImages = () => {
     // lock context menu (disable right click on images)
     document.querySelector('body').addEventListener('contextmenu', (e) => { e.preventDefault(); }) 
     // lock drag and drop on images // dragstart drop
@@ -13,7 +13,7 @@ module.exports.protectImages = () => {
  *  - boolean false (no event set) : if desktop browser or if no orientationChangeHandler argument is received
  *  - function orientationChangeEventRemover (event set) : a function to call to remove the listener
  */
-module.exports.listenOrientation = async(orientationChangeHandler) => {
+const listenOrientation = async(orientationChangeHandler) => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);    
     (async(a) => {
         if( isMobile ) 
@@ -31,4 +31,9 @@ module.exports.listenOrientation = async(orientationChangeHandler) => {
     })(navigator.userAgent||navigator.vendor||window.opera);
     return isMobile
       
+}
+
+module.exports = {
+    listenOrientation,
+    protectImages
 }
