@@ -19,7 +19,6 @@ import Api from '../constants/Api'
 import { protectImages, listenOrientation } from '../constants/StartUpEvents'
 import { apostrophe } from '../constants/Utils'
 /* Images */
-import logo from '../images/logo.png';
 import transparentLogo from '../images/transparentLogo.png';
 import Colors from '../constants/Colors';
 import Footer from './Footer';

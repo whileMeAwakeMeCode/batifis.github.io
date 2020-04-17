@@ -3,13 +3,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Loader, Image } from 'semantic-ui-react';
-import Utils from '../constants/Utils';
+import {percentOf, percentage, keyExtractor, ofType} from '../constants/Utils';
 import Layout from './Layout';
 import BadgeImage from './BadgeImage';
 
 const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
-    const delta = Math.round(Utils.percentOf(height - maxHeight, height)) // 396 - 413 = -4
-    const autoWidth = Math.round(width - Utils.percentage(delta, width))  // 930 - (-4, 930) = 967
+    const delta = Math.round(percentOf(height - maxHeight, height)) // 396 - 413 = -4
+    const autoWidth = Math.round(width - percentage(delta, width))  // 930 - (-4, 930) = 967
     // console.log(`
     // == auto width calculation ==
     // width: ${width}
@@ -38,7 +38,7 @@ class Carousel extends Component {
 
 
     renderItem = (img) => {
-        let key = Utils.keyExtractor()
+        let key = keyExtractor()
         let badgeWrapWidth = getImageAutoWidth({
             width: img.width,
             height: img.height,
@@ -68,7 +68,7 @@ class Carousel extends Component {
 
     render() {
         const {settings} = this.state
-        const hasReachedData = Utils.ofType(this.props.data) === 'array'
+        const hasReachedData = ofType(this.props.data) === 'array'
         const hasData = hasReachedData && this.props.data.length > 0
      
         return(
