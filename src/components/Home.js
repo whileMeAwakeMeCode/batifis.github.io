@@ -332,7 +332,7 @@ class Home extends Component {
         const {isSmallDevice} = Layout
         const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData, forbiddenOrientation} = this.state
         const CategorySelection = () => <Button className="appButtonBlue" style={Styles.largeAppBlueButton} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>;
-        activeCategory && console.log('apostrophe({expression: activeCategory.title, article: "de"})', apostrophe({expression: activeCategory.title, article: "de"}));
+        const usedCarouselDataLength = sortedCarouselData && sortedCarouselData.length && sortedCarouselData.length.toString()
         return(
             <div>
                 <Modal dimmer='blurring' size='mini' open={forbiddenOrientation} style={{textAlign: 'center'}} ><Modal.Header><Icon name="warning" />Oups</Modal.Header><Modal.Content>Veuillez revenir en mode portrait</Modal.Content></Modal>
@@ -472,9 +472,9 @@ class Home extends Component {
                                             }
                                         </div>
                                         {
-                                            activeCategory
+                                            activeCategory && carouselData && carouselData.length
                                             ? <div className="flexCenter" style={{flex: .2, alignItems: 'flex-end', paddingBottom: 5}}>
-                                                <Button className="appButtonWhite" style={Styles.appButtonWhite} onClick={this.resetActiveCategory}>Voir toutes nos réalisations</Button>
+                                                <Button className="appButtonWhite" style={Styles.appButtonWhite} onClick={this.resetActiveCategory}>Voir toutes nos réalisations ({carouselData.length})</Button>
                                             </div>
                                             : null
                                         }
@@ -491,7 +491,11 @@ class Home extends Component {
                                             </div>
                                             <div style={{flex: .8}}></div>
                                             <div style={{flex: .1}}>
-                                                <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', marginTop: 5, marginBottom: '1%'}} onClick={this.goToRealisations}>Voir toutes nos réalisations dans la catégorie {activeCategory.title}</Button>
+                                                {
+                                                    usedCarouselDataLength
+                                                    ? <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', marginTop: 5, marginBottom: '1%'}} onClick={this.goToRealisations}>Voir toutes nos réalisations dans la catégorie {activeCategory.title} ({usedCarouselDataLength})</Button>
+                                                    : null
+                                                }
                                                 <CategorySelection />
                                             </div>
                                         </Slide>
@@ -500,35 +504,39 @@ class Home extends Component {
                                 }
                             </div>
 
-                            <Slide right>
-                                <Fade>
-                                    <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
-                                        <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? apostrophe({expression: activeCategory.title, article: "de"}) : ""}</p>
-                                        <div style={{padding: '2em'}}>
-                                            {/* gallery MUST have 2 modes : activeCategory(state) || all */}
-                                            <Carousel 
-                                                data={activeCategory ? sortedCarouselData : carouselData} 
-                                                removeSource={this.removeImageSource} 
-                                                admin={connected} />
-                                        </div>  
-                                        {
-                                            activeCategory
-                                            ? <div>
-                                                <CategorySelection />
-                                            </div>
-                                            : <Button 
-                                                className="appButtonBlue" 
-                                                style={{...Styles.appButtonBlue, width: '90vw', alignSelf: 'center', 
-                                                marginBottom: 5}} 
-                                                onClick={this.goToCategoriesMenu}
-                                                >
-                                                    Sélectionner une {activeCategory ? "autre" : ""} catégorie
-                                                </Button>
+                            {
+                                (activeCategory ? (sortedCarouselData && sortedCarouselData.length) : (carouselData && carouselData.length)) 
+                                ? <Slide right>
+                                    <Fade>
+                                        <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
+                                            <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? apostrophe({expression: activeCategory.title, article: "de"}) : ""}</p>
+                                            <div style={{padding: '2em'}}>
+                                                {/* gallery MUST have 2 modes : activeCategory(state) || all */}
+                                                <Carousel 
+                                                    data={activeCategory ? sortedCarouselData : carouselData} 
+                                                    removeSource={this.removeImageSource} 
+                                                    admin={connected} />
+                                            </div>  
+                                            {
+                                                activeCategory
+                                                ? <div>
+                                                    <CategorySelection />
+                                                </div>
+                                                : <Button 
+                                                    className="appButtonBlue" 
+                                                    style={{...Styles.appButtonBlue, width: '90vw', alignSelf: 'center', 
+                                                    marginBottom: 5}} 
+                                                    onClick={this.goToCategoriesMenu}
+                                                    >
+                                                        Sélectionner une {activeCategory ? "autre" : ""} catégorie
+                                                    </Button>
 
-                                        }  
-                                    </div>
-                                </Fade>
-                            </Slide>
+                                            }  
+                                        </div>
+                                    </Fade>
+                                </Slide>
+                                : null
+                            }
 
                             
                             {/* footer */}
