@@ -3,6 +3,7 @@ import { Icon, Divider, Image } from 'semantic-ui-react'
 import Colors from '../constants/Colors'
 import Layout from './Layout'
 import logo from '../images/transparentLogo.png'
+import proAppsLogo from '../images/proAppsFull.png'
 import LegalMentions from './LegalMentions'
 
 const AppLogo = (props) => <Image {...props} centered src={logo} size={props.size || "small"} />
@@ -85,9 +86,10 @@ class Footer extends Component {
 
 
                             <div className="ui mid divider"></div>
-                            <div className="clickable ui center aligned white small header"><a className="regularATag" href="https://proapps.fr" target="_blank" rel="noopener noreferrer"><h4>Concepteur site web & application</h4></a></div>
-
-                            <div className="ui mid divider"></div>    
+                            <div style={{paddingTop: 50}} className="clickable ui center aligned white small header">
+                                <a className="regularATag" href="https://proapps.fr" target="_blank" rel="noopener noreferrer"><h4>Site web & Application</h4></a>
+                                <Image src={proAppsLogo} alt="site internet proapps" className="clickable" style={isSmallDevice ? {} : {marginTop:"10px", width:Layout.landscape ? '25%' : '100%', height:"auto", objectFit:"contain"}} href="https://proapps.fr/" target="_blank" rel="noopener noreferrer" />
+                            </div>
 
                         </div>
 
