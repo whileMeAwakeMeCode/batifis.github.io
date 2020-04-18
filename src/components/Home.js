@@ -351,7 +351,7 @@ class Home extends Component {
                                     titleStyle={Styles.fontSize(30)}
                                     subTitle={<p className="gotuText">connectez-vous à votre compte Batifis</p>}
                                     subTitleStyle={Styles.beige15}
-                                    leftElement={<Image src={transparentLogo} size="small" />}
+                                    leftElement={<Image src={transparentLogo} size="small" alt=" " />}
                                     alignRight="center"
                                     containerStyle={Styles.anthraciteSegment}
                                     contentStyle={Styles.whiteText}
@@ -403,7 +403,7 @@ class Home extends Component {
                         <Parallax
                             blur={0}
                             bgImage={require('../photo0.jpg')}
-                            bgImageAlt="batifis"
+                            bgImageAlt="maçonnerie construction peinture enduit isolation péronne roye"
                             bgImageStyle={Styles.parallaxBg}
                             strength={Layout.parallaxStrength}
                         >
@@ -424,7 +424,7 @@ class Home extends Component {
                                             className="boldOnHover silText white clickable"
                                             //style={{display: 'flex', flex: .5, padding: 10, color: '#fff', fontSize: 18}}
                                             href='mailto:contact@batifis.fr'
-                    
+                                            
                                         >
                                             
                                             <Icon name="envelope" color={Colors.white} />
@@ -435,7 +435,7 @@ class Home extends Component {
                         </Parallax>
                         <div style={Styles.logoSegmentWrapper}>
                             <div style={Layout.logoWrapper}>
-                                <Image circular centered size="large" src={transparentLogo/*was logo*/} style={Layout.logoPadding} />
+                                <Image circular centered size="large" src={transparentLogo/*was logo*/} style={Layout.logoPadding} alt=" "/>
                             </div>
                             <div style={Styles.fullHeightColumn}>
                                 <p className="silText" style={Layout.welcomeText}>Au service de votre batiment</p>

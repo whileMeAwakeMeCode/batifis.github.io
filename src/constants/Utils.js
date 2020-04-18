@@ -32,4 +32,15 @@
       return vowels.indexOf(expression.charAt(0)) >= 1 ? `${`${article.charAt(0)}'`}${expression}` : `${article} ${expression}`
     }
 
+    export const randomFrom = (source, options) => {
+        const {split} = options || {}
+        let splitted = split && source.split(split)
+        
+        return (
+            splitted 
+            ? splitted[Math.floor(Math.random() * splitted.length)]
+            : source[Math.floor(Math.random() * source.length)]
+        )
+    }
+
 

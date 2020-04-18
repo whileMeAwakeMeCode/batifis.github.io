@@ -6,6 +6,7 @@ import { Loader, Image } from 'semantic-ui-react';
 import {percentOf, percentage, keyExtractor, ofType} from '../constants/Utils';
 import Layout from './Layout';
 import BadgeImage from './BadgeImage';
+import { randomFrom } from '../constants/Utils'
 
 const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
     const delta = Math.round(percentOf(height - maxHeight, height)) // 396 - 413 = -4
@@ -23,6 +24,17 @@ const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
     return autoWidth > maxWidth ? maxWidth : autoWidth
 }	
 
+const altCities = [
+    "roye", "péronne", "Roye", "Péronne", '80200 Péronne', '80700 Roye'
+]
+
+
+/**
+ * @dev Props :
+ *  - data {array} : provided source data 
+ *  - admin {bool} : if true, display an icon on right top border of the slide
+ *  - removeSource {fun} : function called to remove one of the source (admin only) 
+ */
 class Carousel extends Component {
 
     state = {
@@ -36,8 +48,10 @@ class Carousel extends Component {
 
     removeFromPhotos = (source) => typeof this.props.removeSource === 'function' && this.props.removeSource(source)
 
+    randomCity = () => randomFrom(altCities)
 
     renderItem = (img) => {
+        let autoCity = this.randomCity()
         let key = keyExtractor()
         let badgeWrapWidth = getImageAutoWidth({
             width: img.width,
@@ -60,7 +74,7 @@ class Carousel extends Component {
             }}
         />
         : <div key={key}>
-            <Image centered className="shadow" src={img.source} style={{height: '70vh', width: 'auto', maxWidth: '70vw', objectFit: 'contain', borderRadius: 5}} />
+            <Image alt={`réalisation de ${img.categories ? randomFrom(img.categories, {split: ','}) : "Batifis"} à ${autoCity}`} centered className="shadow" src={img.source} style={{height: '70vh', width: 'auto', maxWidth: '70vw', objectFit: 'contain', borderRadius: 5}} />
             <div style={{height: 20}} />
         </div>
         
