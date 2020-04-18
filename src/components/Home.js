@@ -146,20 +146,11 @@ class Home extends Component {
         if (connected) window.alert('Vous êtes déjà connecté !')
         else {
             this.setState({loginProcessing: true})
-
-            const getAdmhash = (() => {
-                return(() => {
-                    return "d0b80d5187f7abeb67c972b16cef1379ba9b4589370baca9a0df6076fd8e7a2c1c52999def0353a761c277e53a28f045"
-                })()
-            })
-           
             const hash = await Crypto.encrypt(`${email}::${pwd}`, true)
-            const isAdm = await Promise.resolve(
-                getAdmhash() === hash
-            )
-       
-        
-            this.setState({connected: isAdm, loginProcessing: isAdm || false, loginError: !isAdm, intranetActivated: !isAdm})
+
+            const isAdm = await Api.login(hash);
+            console.log('isAdm', {isAdm, type: typeof isAdm})
+            this.setState({connected: isAdm, loginProcessing: isAdm || false, loginError: !isAdm})
             
             setTimeout(() => {
 
@@ -505,7 +496,9 @@ class Home extends Component {
                             </div>
 
                             {
-                                (activeCategory ? (sortedCarouselData && sortedCarouselData.length) : (carouselData && carouselData.length)) 
+                                (
+                                    activeCategory ? (sortedCarouselData && sortedCarouselData.length) : true
+                                ) 
                                 ? <Slide right>
                                     <Fade>
                                         <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>

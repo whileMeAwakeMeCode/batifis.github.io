@@ -1,6 +1,9 @@
 import Axios from 'axios'
 
 const API_URL = window.location.hostname === "localhost" ? "http://localhost:3001" : "https://batifis.herokuapp.com"
+
+
+
 const Api = {
 
     get : async(dirName) => {
@@ -76,7 +79,28 @@ const Api = {
             console.error(errMsg, e)
             throw(errMsg)
         }
-    }
+    },
+    /**
+     * @dev Make a login post request to the server
+     * @param {string} hash a valid admin hash for connexion
+     * @return {object} {connected} 
+     */
+    login: async(hash) => {
+
+        try {
+            const {status, data} /*{status, data: connected}*/ = await Axios({
+                method: "post",
+                url: `${API_URL}/login`,
+                data: { hash },   // FormData
+            })
+
+            return status === 200 ? data.connected : false
+            
+        }catch(e) {
+            console.log(' ---> login error', e)
+            return false
+        }
+    },
 
 }
 
