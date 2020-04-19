@@ -67,9 +67,9 @@ class Intranet extends React.Component {
     }
     
     onImagesSelected = async({files:_files, resetFiles}) => {
-    
+        const catLen = this.state.categories && this.state.categories.length
         // do not allow upload is no categories set
-        this.state.categories && this.state.categories.length
+        catLen
         ? (async() => {    
             window.scrollTo(0, 0);
             const {acceptedFiles: files, imageDatas: _imageDatas} = _files
@@ -91,24 +91,15 @@ class Intranet extends React.Component {
                 this.setState({completed: true})
                 // wait 1.5scd before setting progress bar to inactive
                 setTimeout(() => {
-                    const s = files.length > 1 ? "s" : ""
+                    const filesPlural = files.length > 1 ? "s" : ""
+                    const catPlural = catLen > 1 ? "s" : ""
                     this.setState({uploadingFiles: false})
-                    // this.props.log({
-                    //     title: 'Succès',
-                    //     titleStyle: {color: 'green'},
-                    //     message: `${files.length} image${s} enregistrée${s}`,
-                    //     icon: 'check',
-                    //     iconColor: "green",
-                    //     maxStay: 1500,
-                    //     styleSheet: {textAlign: 'center'},
-                    //     onClose: this.resetIntranet.bind(this) 
-                    // })
-                    this.resetIntranet()
+                
+                    this.resetIntranet();
+
                     this.props.setSnack({
-                        status: 'success',
-                        message: `${files.length} image${s} enregistrée${s}`,
+                        message: `${files.length} image${filesPlural} enregistrée${filesPlural} dans ${catLen} categorie${catPlural}`,
                         closeIcon: 'check',
-                        //onClose: this.resetIntranet.bind(this)
                     })
                     resetFiles()
                 }, 1500)
@@ -117,16 +108,9 @@ class Intranet extends React.Component {
                
                 this.setState({completed: true, color: 'red'})
 
-                this.props.log({
-                    title: 'Erreur',
-                    titleStyle: {color: 'red'},
+                this.props.setSnack({
                     message: upload.error || "Il y a eu une erreur lors de l'enregistrement de vos images. Veuillez réessayer, si le problème persiste, vérifiez votre connexion au réseau ou contactez le support",
-                    icon: 'close',
-                    iconColor: "red",
-                    stay: true,
-                    closeButton: true,
-                    styleSheet: {textAlign: 'center'}
-
+                    closeIcon: 'close',
                 })
 
                 setTimeout(() => {
@@ -135,21 +119,14 @@ class Intranet extends React.Component {
             }
 
         })()
-        : this.props.log({
-            title: 'Petit oubli...',
-            titleStyle: {color: Colors.black},
-            message: "Veuillez sélectionner au moins une catégorie",
-            messageStyle: {fontSize: Layout.titleText},
-            icon: 'warning sign',
-            iconColor: "orange",
-            stay: true,
-            closeButton: true,
-            closeText: "Ok",
-            styleSheet: {textAlign: 'center'},
-            onClose: () => window.scrollTo(0, 0)
-
-        });
-       
+        : (() => {
+            window.scrollTo(0, 0);
+            this.props.setSnack({
+                message: "Veuillez sélectionner au moins une catégorie",
+                closeIcon: 'close',
+            })
+        })()
+  
     }
 
 

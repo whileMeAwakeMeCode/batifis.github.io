@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import { Seo } from './Seo';
 
 /**
  * #PROPS :
@@ -12,6 +12,10 @@ class LegalMentions extends Component {
 
         return (
             <div id="legal_mentions" className="ui inverted left-aligned padded">
+                <Seo
+                    title="Batifis, mentions légales"
+                    description="Conditions d'utilisation et mentions légales du site internet de Batifis, entreprise de travaux du batiment à Péronne et à Roye dans la somme"
+                />
                 <div className="ui segment">
                     <AppLogo size="small" floated='left' />
                     

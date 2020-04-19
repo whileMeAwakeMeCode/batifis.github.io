@@ -16,14 +16,16 @@ import Carousel from './Carousel'
 import Intranet from './Intranet'
 import Footer from './Footer';
 import CustomIcon from './CustomIcon';
+import { Seo } from './Seo';
 
 /* Constants */
 import layout from './Layout'
 import Api from '../constants/Api'
 import { protectImages, listenOrientation } from '../constants/StartUpEvents'
-import { apostrophe } from '../constants/Utils'
+import { apostrophe, randomFrom } from '../constants/Utils'
 import Colors from '../constants/Colors';
 import Styles from '../constants/Styles';
+import { altCities } from '../constants/constants'
 import Crypto from './Crypto';
 
 /* Images */
@@ -163,29 +165,16 @@ class Home extends Component {
                     this.setSnack({
                         message: 'Vous êtes connecté',
                         closeIcon: 'check',
-                        duration: 99999999
+                        duration: 2500
                     })
                 
                 } else {
-                    // const msgColor = isAdm ? 'green' : 'red';
-                    // const msgTitle = isAdm ? 'Succès' : 'Erreur';
-                    // msgIcon = isAdm ? 'check' : 'close'
-                    // msg = isAdm ? 'Vous êtes connecté' : 'Connexion refusée';
-
+                   
                     this.setSnack({
                         message: 'Connexion refusée',
                         icon: 'exclamation'
                     })
-                    // this.log({
-                    //     title: msgTitle,
-                    //     titleStyle: {color: msgColor},
-                    //     message: msg,
-                    //     icon: msgIcon,
-                    //     iconStyle: {color: msgColor},
-                    //     maxStay: 1500,
-                    //     size: 'tiny',
-                    //     styleSheet: {textAlign: 'center'}
-                    // });
+                   
                 } 
 
             }, 500)
@@ -205,15 +194,6 @@ class Home extends Component {
         return(
             displayLog 
             ? <Log 
-                // message={message}
-                // title={title}
-                // icon={icon}
-                // iconStyle={iconStyle}
-                // iconColor={iconColor}
-                // activityIndicator={activityIndicator}
-                // stay={stay}
-                // timedOutComponent = {timedOutComponent}
-                // closeButton={closeButton}
                 {...log}
                 maxStay={maxStay}        
                 closed={typeof message === 'undefined'} 
@@ -329,6 +309,7 @@ class Home extends Component {
         
         return (
             <div key={`cat_${colIndex}`} className="flexCenter spaceAround" style={Styles.flexColumn}>
+                
                 <Fade>
                 {
                     colCats.map((cat, catIndex) => <div 
@@ -382,20 +363,16 @@ class Home extends Component {
 
         }catch(e) {
             console.log('removeImageSource error', e)
-            this.log({
-                title: 'Erreur',
-                titleStyle: {color: Colors.anthracite},
+            this.setSnack({
                 message: 'Il y a eu une erreur lors de la suppression de votre image, veuillez réessayer. Si le problème persiste, contactez le support',
-                icon: 'close',
-                iconStyle: {color: 'red'},
-                stay: true,
-                size: 'small',
-                closeButton: true,
-                closeText: 'Ok',
-                styleSheet: {textAlign: 'center'}
-            });
+                closeIcon: 'close',
+            })
+           
         }
     }
+
+    randomCity = () => randomFrom(altCities)
+
 
     render() {
         const {isSmallDevice} = Layout
@@ -404,11 +381,15 @@ class Home extends Component {
         const usedCarouselDataLength = sortedCarouselData && sortedCarouselData.length && sortedCarouselData.length.toString()
         return(
             <div>
+                <Seo 
+                  title="default"
+                  description="Entreprise du batiment dans la somme. Découvrez nos travaux de rénovation, construction, maçonnerie, carrelage, isolation, peinture. Devis gratuit"
+                />
                 <Modal dimmer='blurring' size='mini' open={forbiddenOrientation} style={{textAlign: 'center'}} ><Modal.Header><Icon name="warning" />Oups</Modal.Header><Modal.Content>Veuillez revenir en mode portrait</Modal.Content></Modal>
                 {this.maybeLogMsg()}
                 {
                     displayIntranet
-                    ? <Intranet log={this.log.bind(this)} setSnack={this.setSnack} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
+                    ? <Intranet setSnack={this.setSnack} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
                     : <div style={{zIndex: 1}}>
                         <div key="metas" style={Styles.invisible}>
                             <p className="unselectable tt">
@@ -554,6 +535,11 @@ class Home extends Component {
                                 {
                                     activeCategory
                                     ? <div className="silTextAll flexCenter" style={{height: '100vh', backgroundColor: Colors.white, color: Colors.anthracite, flexDirection: 'column'}}>
+                                      
+                                        <Seo 
+                                            title={`Batifis, ${activeCategory.title} : nos réalisations`}
+                                            description={`Exemple de réalisation Batifis : travaux ${apostrophe({expression: activeCategory.title, article: "de"})} à ${this.randomCity()}`}
+                                        />
                                         <Slide top>
                                             <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', flex: .1}}>
                                                 <p style={{fontSize: Layout.bigTitleText, color: Colors.batifisBlue}}>{activeCategory.title}</p>
@@ -578,6 +564,7 @@ class Home extends Component {
                                     activeCategory ? (sortedCarouselData && sortedCarouselData.length) : true
                                 ) 
                                 ? <Slide right>
+                                    
                                     <Fade>
                                         <div id="realisations" style={{height: '100vh'/*isSmallDevice ? '100vh' : '50vh'*/, display: 'flex', justifyContent: 'center', flexDirection: 'column', backgroundColor: Colors.batifisGrey, color: Colors.black}}>
                                             <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? apostrophe({expression: activeCategory.title, article: "de"}) : ""}</p>
