@@ -2,6 +2,8 @@
 import React, {Component} from 'react'
 import { Parallax } from 'react-parallax'
 import {Image, Modal, Form, Button, Icon, Dimmer} from 'semantic-ui-react'
+import Snackbar from '@material-ui/core/Snackbar'
+
 // effects
 import Fade from 'react-reveal/Fade';
 import Slide from 'react-reveal/Slide';   
@@ -12,19 +14,20 @@ import ListItem from './ListItem'
 import Log from './Log'
 import Carousel from './Carousel'
 import Intranet from './Intranet'
+import Footer from './Footer';
+import CustomIcon from './CustomIcon';
 
 /* Constants */
 import layout from './Layout'
 import Api from '../constants/Api'
 import { protectImages, listenOrientation } from '../constants/StartUpEvents'
 import { apostrophe } from '../constants/Utils'
+import Colors from '../constants/Colors';
+import Styles from '../constants/Styles';
+import Crypto from './Crypto';
+
 /* Images */
 import transparentLogo from '../images/transparentLogo.png';
-import Colors from '../constants/Colors';
-import Footer from './Footer';
-import CustomIcon from './CustomIcon';
-import Crypto from './Crypto';
-import Styles from '../constants/Styles';
 
 const Layout = layout.getLayout()
 
@@ -153,26 +156,37 @@ class Home extends Component {
             this.setState({connected: isAdm, loginProcessing: isAdm || false, loginError: !isAdm})
             
             setTimeout(() => {
+                //let msgIcon, msg;
 
-                isAdm
-                ? this.toggleIntranet()
-                : (() => {
-                    const msgColor = isAdm ? 'green' : 'red';
-                    const msgTitle = isAdm ? 'Succès' : 'Erreur';
-                    const msgIcon = isAdm ? 'check' : 'close'
-                    const msg = isAdm ? 'Vous êtes connecté' : 'Connexion refusée';
+                if (isAdm) {
+                    this.toggleIntranet()
+                    this.setSnack({
+                        message: 'Vous êtes connecté',
+                        closeIcon: 'check',
+                        duration: 99999999
+                    })
+                
+                } else {
+                    // const msgColor = isAdm ? 'green' : 'red';
+                    // const msgTitle = isAdm ? 'Succès' : 'Erreur';
+                    // msgIcon = isAdm ? 'check' : 'close'
+                    // msg = isAdm ? 'Vous êtes connecté' : 'Connexion refusée';
 
-                    this.log({
-                        title: msgTitle,
-                        titleStyle: {color: msgColor},
-                        message: msg,
-                        icon: msgIcon,
-                        iconStyle: {color: msgColor},
-                        maxStay: 1500,
-                        size: 'tiny',
-                        styleSheet: {textAlign: 'center'}
-                    });
-                })()  
+                    this.setSnack({
+                        message: 'Connexion refusée',
+                        icon: 'exclamation'
+                    })
+                    // this.log({
+                    //     title: msgTitle,
+                    //     titleStyle: {color: msgColor},
+                    //     message: msg,
+                    //     icon: msgIcon,
+                    //     iconStyle: {color: msgColor},
+                    //     maxStay: 1500,
+                    //     size: 'tiny',
+                    //     styleSheet: {textAlign: 'center'}
+                    // });
+                } 
 
             }, 500)
         }
@@ -210,6 +224,49 @@ class Home extends Component {
         )
     }
 
+    closeSnack = () => this.setState({snack: false})
+
+    
+    maybeDisplaySnack = () => {
+        const {snack} = this.state;
+        const { Action: _Action, closeIcon, duration, message, onIconClick, onClose } = snack || {}
+        
+        const clickHandler = onIconClick ? () => { this.closeSnack(); onIconClick(); } : this.closeSnack
+        const Action = () => closeIcon ? <Icon className={onIconClick ? 'clickable' : ''} name={closeIcon} onClick={clickHandler} /> : () => _Action
+        return (
+            snack 
+            ? <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                open={true}
+                autoHideDuration={duration || 6000}
+                onClose={typeof onClose === 'function' ? () => { this.closeSnack(); onClose(); } : this.closeSnack} 
+                message={message}
+                action={
+                    Action
+                    ? <React.Fragment>
+                        <Action />
+                    </React.Fragment>
+                    : null
+                }
+            />
+        
+            : null
+        )
+    }
+
+    /**
+     * @dev snack {object} 
+     *  - message
+     *  - duration {number} *option* (default: 6000)
+     *  - icon {string} *option* 
+     *  - onIconClick {fun} *option* handler for icon click event (will be fired after the snackbar close)
+     *  - Action {Component} *option* (will overwrite the icon prop)
+     */
+    setSnack = (snack => this.setState({snack})).bind(this)
+
     scrollTo = (route) => {
         window.location.href = `/#${route}`
     }
@@ -217,8 +274,8 @@ class Home extends Component {
     goToCategoriesMenu = () => this.scrollTo('metier')
     goToRealisations = () => this.scrollTo('realisations')
 
-    sortRealisationsByCategory = async(catKey) => {
-        const {carouselData} = this.state
+    sortRealisationsByCategory = async(catKey, _carouselData/*opt*/) => {
+        const carouselData = _carouselData || this.state.carouselData
         //console.log('carouselData', carouselData.map((cd) => cd.categories.indexOf(catKey) >= 0))
         let carouselDataSorting = await Promise.resolve(
             carouselData.map((cd) => cd.categories.indexOf(catKey) >= 0)
@@ -228,7 +285,17 @@ class Home extends Component {
             carouselData.filter((cd, cdi) => carouselDataSorting[cdi])    
         )
         
-        this.setState({sortedCarouselData})
+        this.setState({
+            sortedCarouselData, 
+            ...(_carouselData ? {carouselData} : {})
+        });
+
+        (
+            !carouselData.length 
+            || !sortedCarouselData.length
+        ) 
+        && this.scrollTo('activeCategory');
+        
     }
 
     activateCategory = async(activeCategory) => {
@@ -297,13 +364,24 @@ class Home extends Component {
             const removal = await Api.remove(source)
             if (removal.status === 200) {
                 // update carouselData from server response
-                const {data: carouselData} = removal;
-                this.setState({carouselData})
+                const { data: carouselData } = removal;
+                const { activeCategory, sortedCarouselData } = this.state
+                const { key } = activeCategory || {};
+
+                key 
+                ? this.sortRealisationsByCategory(key, carouselData)
+                : this.setState({carouselData});
+
+                this.setSnack({
+                    message: "l'image a été supprimée",
+                    closeIcon: 'check',
+                })
+
 
             } else throw(Error(`removal operation failed with status ${removal.status}`))
 
         }catch(e) {
-            console.log('removeImageSource')
+            console.log('removeImageSource error', e)
             this.log({
                 title: 'Erreur',
                 titleStyle: {color: Colors.anthracite},
@@ -330,7 +408,7 @@ class Home extends Component {
                 {this.maybeLogMsg()}
                 {
                     displayIntranet
-                    ? <Intranet log={this.log.bind(this)} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
+                    ? <Intranet log={this.log.bind(this)} setSnack={this.setSnack} categories={this.categoriesOptions} closeIntranet={this.closeIntranetUpdateList.bind(this)} />
                     : <div style={{zIndex: 1}}>
                         <div key="metas" style={Styles.invisible}>
                             <p className="unselectable tt">
@@ -539,6 +617,11 @@ class Home extends Component {
                         </div>
                     </div>
                 }
+
+                {
+                    this.maybeDisplaySnack()
+                }
+
             </div>
            
         )

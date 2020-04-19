@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
-const API_URL = window.location.hostname === "localhost" ? "http://localhost:3001" : "https://batifis.herokuapp.com"
-
+//const API_URL = window.location.hostname === "localhost" ? "http://localhost:3001" : "https://batifis.herokuapp.com"
+const API_URL = "https://batifis.herokuapp.com"
 
 
 const Api = {

@@ -93,15 +93,22 @@ class Intranet extends React.Component {
                 setTimeout(() => {
                     const s = files.length > 1 ? "s" : ""
                     this.setState({uploadingFiles: false})
-                    this.props.log({
-                        title: 'Succès',
-                        titleStyle: {color: 'green'},
+                    // this.props.log({
+                    //     title: 'Succès',
+                    //     titleStyle: {color: 'green'},
+                    //     message: `${files.length} image${s} enregistrée${s}`,
+                    //     icon: 'check',
+                    //     iconColor: "green",
+                    //     maxStay: 1500,
+                    //     styleSheet: {textAlign: 'center'},
+                    //     onClose: this.resetIntranet.bind(this) 
+                    // })
+                    this.resetIntranet()
+                    this.props.setSnack({
+                        status: 'success',
                         message: `${files.length} image${s} enregistrée${s}`,
-                        icon: 'check',
-                        iconColor: "green",
-                        maxStay: 1500,
-                        styleSheet: {textAlign: 'center'},
-                        onClose: this.resetIntranet.bind(this) 
+                        closeIcon: 'check',
+                        //onClose: this.resetIntranet.bind(this)
                     })
                     resetFiles()
                 }, 1500)
