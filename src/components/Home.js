@@ -116,11 +116,11 @@ class Home extends Component {
  
         // listen to mobile device orientation change
         const isMobile = await listenOrientation(this.orientationListener)        
-        console.log('isMobile', isMobile)  
+        //console.log('isMobile', isMobile)  
         
         // check if current orientation is allowed
         if (availWidth > availHeight && isMobile) {
-            console.log('*LANDSCAPE TRIGGERED ON MOUNT*')
+            //console.log('*LANDSCAPE TRIGGERED ON MOUNT*')
 
             // TODO : change Layout : TODO
 
@@ -153,7 +153,7 @@ class Home extends Component {
             const hash = await Crypto.encrypt(`${email}::${pwd}`, true)
 
             const isAdm = await Api.login(hash);
-            console.log('isAdm', {isAdm, type: typeof isAdm})
+            //console.log('isAdm', {isAdm, type: typeof isAdm})
             this.setState({connected: isAdm, loginProcessing: isAdm || false, loginError: !isAdm})
             
             setTimeout(() => {
@@ -280,7 +280,7 @@ class Home extends Component {
     activateCategory = async(activeCategory) => {
         
         let sortedList = await this.sortRealisationsByCategory(activeCategory.key)
-        console.log('sortedList', sortedList)
+        //console.log('sortedList', sortedList)
         this.scrollTo('activeCategory')
         this.setState({activeCategory})
     }
@@ -361,7 +361,7 @@ class Home extends Component {
             } else throw(Error(`removal operation failed with status ${removal.status}`))
 
         }catch(e) {
-            console.log('removeImageSource error', e)
+            //console.log('removeImageSource error', e)
             this.setSnack({
                 message: 'Il y a eu une erreur lors de la suppression de votre image, veuillez réessayer. Si le problème persiste, contactez le support',
                 closeIcon: 'close',
@@ -377,7 +377,8 @@ class Home extends Component {
         const {isSmallDevice} = Layout
         const {loginProcessing, connected, activeCategory, loginError, displayIntranet, carouselData, sortedCarouselData, forbiddenOrientation} = this.state
         const CategorySelection = () => <Button className="appButtonBlue" style={Styles.largeAppBlueButton} onClick={this.goToCategoriesMenu}>Sélectionner une autre catégorie</Button>;
-        const usedCarouselDataLength = sortedCarouselData && sortedCarouselData.length && sortedCarouselData.length.toString()
+        const usedCarouselDataLength = sortedCarouselData && sortedCarouselData.length && sortedCarouselData.length.toString();
+        const usedData = activeCategory ? sortedCarouselData : carouselData;
         return(
             <div>
                 <Seo 
@@ -569,10 +570,13 @@ class Home extends Component {
                                             <p className="silText" style={{fontSize: Layout.bigTitleText, marginBottom: 0}}>Nos Réalisations {activeCategory ? apostrophe({expression: activeCategory.title, article: "de"}) : ""}</p>
                                             <div style={{padding: '2em'}}>
                                                 {/* gallery MUST have 2 modes : activeCategory(state) || all */}
+                                                
                                                 <Carousel 
-                                                    data={activeCategory ? sortedCarouselData : carouselData} 
+                                                    data={usedData} 
                                                     removeSource={this.removeImageSource} 
-                                                    admin={connected} />
+                                                    admin={connected} 
+                                                />
+                                                
                                             </div>  
                                             {
                                                 activeCategory
