@@ -127,7 +127,7 @@ const FileSelector = (props) => {
         </div>
       </div>
 
-      <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw'}} onClick={sendImages}>
+      <Button className="appButtonBlue" style={{...Styles.appButtonBlue, width: '90vw', marginBottom: "1vh"}} onClick={sendImages}>
         Valider
         <Icon name="check" />
       </Button>        
