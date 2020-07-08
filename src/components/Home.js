@@ -126,10 +126,9 @@ class Home extends Component {
 
             this.setState({forbiddenOrientation: true})
         }
-
         // RAT :
-        // const MehmetHash = await Crypto.encrypt(`batifice@laposte.net::Batifis@2020$`, true)
-        // console.log(' ===> MehmetHash', MehmetHash)
+        // const MehmetHash = await Crypto.encrypt(`batifice@laposte.net::Yusufallan3129`, true)
+        // alert(MehmetHash)
     }
 
    

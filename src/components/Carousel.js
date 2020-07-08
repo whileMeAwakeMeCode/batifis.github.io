@@ -6,6 +6,7 @@ import { Loader, Image } from 'semantic-ui-react';
 import {percentOf, percentage, keyExtractor, ofType} from '../constants/Utils';
 import Layout from './Layout';
 import BadgeImage from './BadgeImage';
+import { altCities } from '../constants/constants'
 import { randomFrom } from '../constants/Utils'
 
 const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
@@ -24,9 +25,7 @@ const getImageAutoWidth = ({width, height, maxHeight, maxWidth}) => {
     return autoWidth > maxWidth ? maxWidth : autoWidth
 }	
 
-const altCities = [
-    "roye", "péronne", "Roye", "Péronne", '80200 Péronne', '80700 Roye'
-]
+
 
 
 /**
